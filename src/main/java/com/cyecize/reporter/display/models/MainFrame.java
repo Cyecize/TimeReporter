@@ -1,6 +1,7 @@
 package com.cyecize.reporter.display.models;
 
 import com.cyecize.reporter.config.AppConstants;
+import com.cyecize.reporter.conn.services.DbConnectionStorageService;
 import com.cyecize.reporter.display.Constants;
 import com.cyecize.summer.SummerBootApplication;
 import org.cef.CefApp;
@@ -45,7 +46,7 @@ public class MainFrame extends JFrame {
             @Override
             public void stateHasChanged(CefApp.CefAppState state) {
                 if (state == CefApp.CefAppState.TERMINATED) {
-                    //TODO: SummerBootApplication.dependencyContainer.getObject(DbConnectionStorageService.class).closeAllConnections();
+                     SummerBootApplication.dependencyContainer.getObject(DbConnectionStorageService.class).closeAllConnections();
                     System.exit(0);
                 }
             }

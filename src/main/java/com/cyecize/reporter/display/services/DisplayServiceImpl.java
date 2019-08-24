@@ -1,5 +1,6 @@
 package com.cyecize.reporter.display.services;
 
+import com.cyecize.reporter.conn.DbConnectionConstants;
 import com.cyecize.reporter.display.enums.ConfigFile;
 import com.cyecize.reporter.display.models.MainFrame;
 import com.cyecize.reporter.display.models.WindowPreferences;
@@ -28,7 +29,7 @@ public class DisplayServiceImpl implements DisplayService {
 
     @Override
     public void initialize() {
-        this.runEmbeddedBrowser("/", 8000); //TODO make port configurable
+        this.runEmbeddedBrowser(DbConnectionConstants.DB_CONNECT_ROUTE, 8000); //TODO make port configurable
     }
 
     @Override
@@ -41,7 +42,7 @@ public class DisplayServiceImpl implements DisplayService {
     @Override
     public void runEmbeddedBrowser(String startingUrl, int port) {
         boolean useOsr = false;
-        String url = String.format("http://localhost:%d%s", port, startingUrl);
+        String url = String.format("http://localhost:%d%s?%s=%s", port, startingUrl, DbConnectionConstants.LOAD_STORED_DB_CREDENTIALS_PARAM_NAME, true);
         this.mainFrame.initBrowser(url, useOsr);
     }
 

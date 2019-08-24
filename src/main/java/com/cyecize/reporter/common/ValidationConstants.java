@@ -1,4 +1,4 @@
-package com.cyecize.reporter.config;
+package com.cyecize.reporter.common;
 
 public class ValidationConstants {
 
