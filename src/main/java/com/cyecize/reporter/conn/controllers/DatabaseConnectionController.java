@@ -121,7 +121,7 @@ public class DatabaseConnectionController extends BaseController {
         UserDbConnection dbConnection = this.connectionStorageService.getDbConnection(request.getSession().getId());
         SqlConnectionUtils connectionUtils = dbConnection.getCredentials().getDatabaseProvider().getConnectionUtils();
 
-        return super.view("security/db-selection.twig", "dbNames", connectionUtils.getDatabases(dbConnection.getJdbcConnection()));
+        return super.view("conn/db-selection.twig", "dbNames", connectionUtils.getDatabases(dbConnection.getJdbcConnection()));
     }
 
     @GetMapping(DATABASE_SELECT_ROUTE_AUTHENTICATED)
@@ -155,7 +155,7 @@ public class DatabaseConnectionController extends BaseController {
 
     @GetMapping(DATABASE_CREATE_ROUTE)
     public ModelAndView createDatabaseGetAction() {
-        return super.view("security/db-create.twig");
+        return super.view("conn/db-create.twig");
     }
 
     @PostMapping(DATABASE_CREATE_ROUTE)

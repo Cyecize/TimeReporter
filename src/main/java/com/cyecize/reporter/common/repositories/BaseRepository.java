@@ -20,13 +20,13 @@ import java.util.function.Consumer;
 public abstract class BaseRepository<E, I> {
 
     /**
-     * Value is populated and erased by @DatabaseConnectionInterceptor
+     * Value is populated and erased by @{@link com.cyecize.reporter.conn.interceptors.DatabaseConnectionInterceptor}
      */
     public static EntityManager currentEntityManager;
 
-    protected Class<E> persistentClass;
+    protected final Class<E> persistentClass;
 
-    protected Class<I> primaryKeyType;
+    protected final Class<I> primaryKeyType;
 
     protected String primaryKeyFieldName;
 
