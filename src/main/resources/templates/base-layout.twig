@@ -2,11 +2,13 @@
 <html>
 <head>
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/node_modules/selectize/dist/css/selectize.bootstrap3.css">
 
     {% block stylesheets %} {% endblock %}
 
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/selectize/dist/js/standalone/selectize.min.js"></script>
 </head>
 <body>
 {% embed 'layout/header.twig' %} {% endembed %}
@@ -16,5 +18,10 @@
 </div>
 
 </body>
+<script>
+   $(function () {
+       $('.selectize').selectize({});
+   });
+</script>
 {% block javascripts %} {% endblock %}
 </html>
