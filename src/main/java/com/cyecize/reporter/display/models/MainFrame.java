@@ -46,7 +46,7 @@ public class MainFrame extends JFrame {
             @Override
             public void stateHasChanged(CefApp.CefAppState state) {
                 if (state == CefApp.CefAppState.TERMINATED) {
-                     SummerBootApplication.dependencyContainer.getObject(DbConnectionStorageService.class).closeAllConnections();
+                    SummerBootApplication.dependencyContainer.getObject(DbConnectionStorageService.class).closeAllConnections();
                     System.exit(0);
                 }
             }

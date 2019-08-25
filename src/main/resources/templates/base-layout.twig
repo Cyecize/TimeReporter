@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+    {% block stylesheets %} {% endblock %}
+
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+{% embed 'layout/header.twig' %} {% endembed %}
+
+<div class="container">
+    {% block body %} {% endblock %}
+</div>
+
+</body>
+{% block javascripts %} {% endblock %}
+</html>

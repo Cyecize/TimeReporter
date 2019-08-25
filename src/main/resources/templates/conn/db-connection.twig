@@ -1,0 +1,57 @@
+{% extends '../base-layout.twig' %}
+
+{% block body %}
+    <div class="mr-auto mt-2 pt-3">
+        <h3>Establish Database Connection</h3>
+        <form method="post" id="formDbConnection">
+            <div class="form-group">
+                <label for="dbProvider">Database Provider</label>
+                <select name="databaseProvider" id="dbProvider" required class="form-control  selectize">
+                    <option value="" disabled selected>-- Choose --</option>
+                    {% for provider in providers %}
+                        <option {% if model.databaseProvider == provider %} selected {% endif %}>{{ provider.name }}</option>
+                    {% endfor %}
+                </select>
+                {% embed '../field-err.twig' with {fieldName: 'databaseProvider'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="hostAddress">Host</label>
+                <input value="{{ model.host }}" type="text" id="hostAddress" name="host" class="form-control" required
+                       placeholder="db.server.com">
+                {% embed '../field-err.twig' with {fieldName: 'host'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="port">Port</label>
+                <input value="{{ model.port }}" type="number" id="port" step="1" name="port" placeholder="3306/1433"
+                       class="form-control" required>
+                {% embed '../field-err.twig' with {fieldName: 'port'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input value="{{ model.username }}" type="text" id="username" name="username" placeholder="root"
+                       class="form-control" required>
+                {% embed '../field-err.twig' with {fieldName: 'username'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="******" class="form-control">
+                {% embed '../field-err.twig' with {fieldName: 'password'} %} {% endembed %}
+            </div>
+
+            <div class="form-group text-right">
+                {% if isConnPresent %}
+                    <a href="{{ path('/database/select') }}" class="btn btn-sm btn-success waves-effect waves-light">
+                        Select Database
+                    </a>
+                {% endif %}
+                <button class="btn btn-sm btn-info waves-effect waves-light" id="btnConnect">
+                    Connect
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

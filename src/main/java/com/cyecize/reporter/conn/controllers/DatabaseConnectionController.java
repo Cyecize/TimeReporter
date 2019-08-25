@@ -94,7 +94,7 @@ public class DatabaseConnectionController extends BaseController {
             model.addAttribute("isConnPresent", true);
         }
 
-        return super.view("security/db-connection.twig", "providers", DatabaseProvider.values());
+        return super.view("conn/db-connection.twig", "providers", DatabaseProvider.values());
     }
 
     @PostMapping(DB_CONNECT_ROUTE)
