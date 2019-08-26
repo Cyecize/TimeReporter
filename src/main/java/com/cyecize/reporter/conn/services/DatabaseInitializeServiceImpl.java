@@ -57,7 +57,6 @@ public class DatabaseInitializeServiceImpl implements DatabaseInitializeService 
         EntityManager oldEm = BaseRepository.currentEntityManager;
         BaseRepository.currentEntityManager = entityManager;
 
-        //TODO make sure this method actually works.
         this.userService.createUser(adminUserServiceModel.getAdminUsername(), adminUserServiceModel.getAdminPassword(), RoleType.ROLE_ADMIN);
 
         BaseRepository.currentEntityManager = oldEm;
