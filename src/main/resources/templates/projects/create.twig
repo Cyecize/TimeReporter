@@ -40,13 +40,10 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="/static/js/date-picker.js"></script>
     <script>
         $(function () {
-            $('.date-time-picker').datepicker({
-                language: 'en',
-                minDate: new Date(),
-                todayButton: new Date()
-            });
+            DatePickerPresets.datePickerFromToday(new DatePicker('.date-time-picker'));
         });
     </script>
 {% endblock %}
