@@ -13,7 +13,7 @@ public class CreateDatabaseBindingModel {
 
     @NotNull(message = EMPTY_FIELD)
     @RegEx(value = USERNAME_REGEX, message = INVALID_VALUE)
-    @MaxLength(length = MAX_USERNAME_LENGTH, message = TEXT_TOO_LONG)
+    @MaxLength(length = MAX_NAME_LENGTH, message = TEXT_TOO_LONG)
     private String adminUsername;
 
     @NotNull(message = EMPTY_FIELD)

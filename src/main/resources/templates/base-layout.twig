@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
+{% set adminRole = 'ROLE_ADMIN' %}
 <head>
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/node_modules/selectize/dist/css/selectize.bootstrap3.css">
+    <link rel="stylesheet" href="/node_modules/air-datepicker/dist/css/datepicker.min.css">
 
     {% block stylesheets %} {% endblock %}
 
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/selectize/dist/js/standalone/selectize.min.js"></script>
+    <script src="/node_modules/air-datepicker/dist/js/datepicker.min.js"></script>
+    <script src="/node_modules/air-datepicker/dist/js/i18n/datepicker.en.js"></script>
 </head>
 <body>
 {% embed 'layout/header.twig' %} {% endembed %}

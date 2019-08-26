@@ -6,7 +6,7 @@ public class ValidationConstants {
 
     public static final String JSON_RESPONSE_SUCCESS_KEY_NAME = "success";
 
-    public static final int MAX_USERNAME_LENGTH = 30;
+    public static final int MAX_NAME_LENGTH = 30;
 
     public static final String USERNAME_REGEX = "[a-zA-Z0-9-_]+";
 
@@ -16,5 +16,4 @@ public class ValidationConstants {
 
     public static final int MAX_VARCHAR_LENGTH = 255;
 
-    public static final int MAX_NAME_LENGTH = 30;
 }

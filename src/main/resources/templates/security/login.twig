@@ -6,7 +6,7 @@
         <form method="post">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input value="{{ model.username.username }}" type="text" id="username" name="username"
+                <input value="{{ model.username.username }}" type="text" id="username" name="username" autofocus
                        class="form-control"
                        placeholder="Username" required>
                 {% embed '../field-err.twig' with {fieldName: 'username'} %} {% endembed %}
