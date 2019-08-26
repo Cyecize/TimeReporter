@@ -17,7 +17,5 @@ public interface DbConnectionStorageService {
 
     String getDatabaseName(String sessionId);
 
-    UserDbConnection getCurrentDbConnection() throws NullPointerException;
-
     UserDbConnection getDbConnection(String sessionId);
 }

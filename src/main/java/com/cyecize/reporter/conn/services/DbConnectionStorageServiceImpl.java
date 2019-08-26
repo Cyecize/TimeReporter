@@ -80,15 +80,6 @@ public class DbConnectionStorageServiceImpl implements DbConnectionStorageServic
     }
 
     @Override
-    public UserDbConnection getCurrentDbConnection() throws NullPointerException {
-        if (this.currentDbConnection == null) {
-            throw new NullPointerException(NO_CURRENT_CONNECTION_MSG);
-        }
-
-        return this.currentDbConnection;
-    }
-
-    @Override
     public UserDbConnection getDbConnection(String sessionId) {
         if (this.sessionConnectionMap.containsKey(sessionId)) {
             UserDbConnection dbConnection = this.sessionConnectionMap.get(sessionId);

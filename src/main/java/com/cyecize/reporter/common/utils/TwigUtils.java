@@ -1,5 +1,6 @@
 package com.cyecize.reporter.common.utils;
 
+import com.cyecize.http.HttpRequest;
 import com.cyecize.reporter.conn.models.UserDbConnection;
 import com.cyecize.reporter.conn.services.DbConnectionStorageService;
 import com.cyecize.reporter.users.entities.User;
@@ -27,20 +28,24 @@ public class TwigUtils {
                 .collect(Collectors.joining(", "));
     }
 
-    public boolean hasJdbcConnection() {
-        final UserDbConnection dbConnection = this.connectionStorageService.getCurrentDbConnection();
+    public boolean hasJdbcConnection(HttpRequest request) {
+        final UserDbConnection dbConnection = this.getConnection(request);
 
         return dbConnection != null && dbConnection.getJdbcConnection() != null;
     }
 
-    public boolean hasOrmConnection() {
-        final UserDbConnection dbConnection = this.connectionStorageService.getCurrentDbConnection();
+    public boolean hasOrmConnection(HttpRequest request) {
+        final UserDbConnection dbConnection = this.getConnection(request);
 
         return dbConnection != null && dbConnection.getOrmConnection() != null;
     }
 
-    public String getDatabaseName() {
-        if (!this.hasOrmConnection()) return null;
-        return this.connectionStorageService.getCurrentDbConnection().getCredentials().getDatabaseName();
+    public String getDatabaseName(HttpRequest request) {
+        if (!this.hasOrmConnection(request)) return null;
+        return this.getConnection(request).getCredentials().getDatabaseName();
+    }
+
+    private UserDbConnection getConnection(HttpRequest request) {
+        return this.connectionStorageService.getDbConnection(request.getSession().getId());
     }
 }

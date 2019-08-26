@@ -13,12 +13,12 @@
                        data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         Connection
-                        {% if utils.hasOrmConnection() %}
-                            <small>( {{ utils.getDatabaseName() }} )</small>
+                        {% if utils.hasOrmConnection(request) %}
+                            <small>( {{ utils.getDatabaseName(request) }} )</small>
                         {% endif %}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="connDropdown">
-                        {% set hasJdbcConn = utils.hasJdbcConnection() %}
+                        {% set hasJdbcConn = utils.hasJdbcConnection(request) %}
                         {% if user %}
                             <a class="dropdown-item" href="{{ path("/database/select/authenticated") }}">
                                 Switch Database
@@ -68,7 +68,7 @@
                         <a class="nav-link" href="{{ path("/logout") }}">Logout</a>
                     </li>
                 {% else %}
-                    {% if utils.hasOrmConnection() %}
+                    {% if utils.hasOrmConnection(request) %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path("/login") }}">Login</a>
                         </li>
