@@ -18,11 +18,7 @@ import java.util.stream.Collectors;
 @TemplateService(serviceNameInTemplate = "dbConnectionService")
 public class DbConnectionStorageServiceImpl implements DbConnectionStorageService {
 
-    private static final String NO_CURRENT_CONNECTION_MSG = "No current db connection for session";
-
     private Map<String, UserDbConnection> sessionConnectionMap;
-
-    private UserDbConnection currentDbConnection;
 
     public DbConnectionStorageServiceImpl() {
         this.sessionConnectionMap = new HashMap<>();
@@ -84,7 +80,6 @@ public class DbConnectionStorageServiceImpl implements DbConnectionStorageServic
         if (this.sessionConnectionMap.containsKey(sessionId)) {
             UserDbConnection dbConnection = this.sessionConnectionMap.get(sessionId);
             dbConnection.setLastUpdatedTime(new Date().getTime());
-            this.currentDbConnection = dbConnection;
 
             return dbConnection;
         }

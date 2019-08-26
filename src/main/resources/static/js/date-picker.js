@@ -15,26 +15,80 @@ function DatePicker(inputSelector) {
 
     const showTimePicker = () => properties.timepicker = true;
 
+    const setAutoClose = (autoClose) => properties.autoClose = autoClose;
+
     const initialize = () => {
         let el = $(inputSelector);
         el.datepicker(properties);
-        el.attr('readonly', true);
+        el.attr('autocomplete', 'off');
+        el.on('keydown', function (e) {
+            e.preventDefault();
+        });
     };
 
     return {
-        setMinDate, setMaxDate, setStartDate, showTodayButton, showTimePicker, initialize,
+        setMinDate, setMaxDate, setStartDate, showTodayButton, showTimePicker, initialize, setAutoClose,
     }
 }
 
 const DatePickerPresets = (() => {
 
     return {
-        datePickerFromToday(datePicker) {
-            datePicker.setMinDate(new Date());
+        datePicker(datePicker, initialize = true) {
             datePicker.showTodayButton();
+            datePicker.setAutoClose(true);
+
+            if (initialize) {
+                datePicker.initialize();
+            }
+        },
+
+        datePickerFromToday(datePicker, initialize = true) {
+            this.datePicker(datePicker, false);
+            datePicker.setMinDate(new Date());
             datePicker.setStartDate(new Date());
 
-            datePicker.initialize();
+            if (initialize) {
+                datePicker.initialize();
+            }
+        },
+
+        dateTimePicker(datePicker, initialize = true) {
+            datePicker.showTodayButton();
+            datePicker.showTimePicker();
+
+            if (initialize) {
+                datePicker.initialize();
+            }
+        },
+
+        dateTimePickerFromToday(datePicker, initialize) {
+            this.datePickerFromToday(datePicker, false);
+            datePicker.setAutoClose(false);
+            datePicker.showTimePicker();
+
+            if (initialize) {
+                datePicker.initialize();
+            }
+        },
+
+        datePickerFrom(datePicker, startDate, initialize = true) {
+            this.datePicker(datePicker, false);
+            datePicker.setMinDate(startDate);
+            datePicker.setStartDate(startDate);
+
+            if (initialize) {
+                datePicker.initialize();
+            }
+        },
+
+        datePickerFromTo(datePicker, startDate, maxDate, initialize = true) {
+            this.datePickerFrom(datePicker, startDate, false);
+            datePicker.setMaxDate(maxDate);
+
+            if (initialize) {
+                datePicker.initialize();
+            }
         },
     }
 })();
