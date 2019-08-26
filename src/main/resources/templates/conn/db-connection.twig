@@ -43,7 +43,7 @@
             </div>
 
             <div class="form-group text-right">
-                {% if isConnPresent %}
+                {% if utils.hasJdbcConnection(request) %}
                     <a href="{{ path('/database/select') }}" class="btn btn-success">
                         Select Database
                     </a>

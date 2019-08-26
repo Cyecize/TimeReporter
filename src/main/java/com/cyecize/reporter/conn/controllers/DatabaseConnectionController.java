@@ -90,8 +90,6 @@ public class DatabaseConnectionController extends BaseController {
             if (!model.hasAttribute("model")) {
                 model.addAttribute("model", dbConnection.getCredentials());
             }
-
-            model.addAttribute("isConnPresent", true);
         }
 
         return super.view("conn/db-connection.twig", "providers", DatabaseProvider.values());
