@@ -1,0 +1,47 @@
+{% extends '../base-layout.twig' %}
+
+{% block body %}
+    <div class="mr-auto mt-2 pt-3">
+        <h3>Create New User</h3>
+
+        <form method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input value="{{ model.username }}" type="text" id="username" name="username" autofocus
+                       class="form-control"
+                       placeholder="Username" required>
+                {% embed '../field-err.twig' with {fieldName: 'username'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="******" class="form-control" required>
+                {% embed '../field-err.twig' with {fieldName: 'password'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="******"
+                       class="form-control" required>
+                {% embed '../field-err.twig' with {fieldName: 'confirmPassword'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select name="role" id="role" class="form-control selectize" required>
+                    <option value="" disabled selected>-- Choose --</option>
+                    {% for role in roles %}
+                        <option {% if model.role == role %} selected {% endif %}>{{ role.name }}</option>
+                    {% endfor %}
+                </select>
+                {% embed '../field-err.twig' with {fieldName: 'role'} %} {% endembed %}
+            </div>
+
+            <div class="form-group d-flex">
+                <div class="ml-auto">
+                    <button class="btn btn-info">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -13,5 +13,7 @@ public class ValidationMessageConstants {
 
     public static final String USERNAME_NOT_FOUND = "Username not found!";
 
+    public static final String USERNAME_TAKEN = "Username taken!";
+
     public static final String INVALID_PASSWORD = "Invalid Password!";
 }
