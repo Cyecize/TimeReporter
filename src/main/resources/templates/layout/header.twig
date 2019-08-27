@@ -62,7 +62,9 @@
                         </div>
                     </li>
                 {% endif %}
+            </ul>
 
+            <ul class="navbar-nav ml-auto">
                 {% if user %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path("/logout") }}">Logout</a>
@@ -74,12 +76,7 @@
                         </li>
                     {% endif %}
                 {% endif %}
-
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
         </div>
     </div>
 </nav>

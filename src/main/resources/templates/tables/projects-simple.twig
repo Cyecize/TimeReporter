@@ -11,6 +11,9 @@
             Start Date
         </th>
         <th class="col-sortable">
+            Owner
+        </th>
+        <th class="col-sortable">
             Completed
         </th>
     </tr>
@@ -22,6 +25,7 @@
             <td>{{ project.id }}</td>
             <td>{{ project.projectName }}</td>
             <td data-sort="{{ utils.millisFromDate(project.startDate) }}">{{ utils.formatDate(project.startDate) }}</td>
+            <td>{{ project.owner.username }}</td>
             <td>{{ project.completed }}</td>
         </tr>
     {% endfor %}

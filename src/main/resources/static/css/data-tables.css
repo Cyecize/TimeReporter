@@ -96,8 +96,9 @@
     font-size: 0.75em;
     color: #fff;
     background: rgba(49, 53, 61, 1);
-
     padding: 5px;
+
+    user-select: none;
 }
 
 .table-style .table-style-row {
