@@ -1,0 +1,39 @@
+{% extends '../base-layout.twig' %}
+
+{% block body %}
+    <div class="mr-auto mt-2 pt-3">
+        <h3>{{ viewModel.viewTitle }}</h3>
+        <div class="row pb-2">
+            <div class="col-md-6"></div>
+            <div class="col-md-6 text-right">
+                <div id="searchBarContainer"></div>
+            </div>
+        </div>
+        {% embed '../tables/projects-' ~ viewModel.type ~ '.twig' with {'projects':viewModel.projects} %} {% endembed %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/static/css/data-tables.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/static/js/data-tables.js"></script>
+
+    <script>
+        $(function () {
+            const table = document.getElementById('listProjectsTable');
+            const container = document.getElementById('searchBarContainer');
+
+            TableUtils.createSearchBarForTable(table, container, {
+                showLabel: true,
+                hideOptions: false,
+                options: [
+                    'Id',
+                    'Project Name'
+                ],
+                searchFieldId: 'searchProjectsField',
+            })
+        });
+    </script>
+{% endblock %}

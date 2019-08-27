@@ -1,5 +1,6 @@
 package com.cyecize.reporter.common.controllers;
 
+import com.cyecize.reporter.common.contracts.ViewModel;
 import com.cyecize.summer.common.models.ModelAndView;
 
 public class BaseController {
@@ -28,6 +29,10 @@ public class BaseController {
 
     protected ModelAndView view(String viewName) {
         return this.view(viewName, new ModelAndView());
+    }
+
+    protected ModelAndView view(String viewName, ViewModel viewModel) {
+        return this.view(viewName, "viewModel", viewModel);
     }
 
     protected ModelAndView view(String viewName, String modelName, Object model) {

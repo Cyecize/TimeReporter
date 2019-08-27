@@ -20,15 +20,15 @@
 <body>
 {% embed 'layout/header.twig' %} {% endembed %}
 
-<div class="container">
+<div class="container" style="max-width: 1400px;">
     {% block body %} {% endblock %}
 </div>
 
 </body>
 <script>
-   $(function () {
-       $('.selectize').selectize({});
-   });
+    $(function () {
+        $('.selectize').selectize({});
+    });
 </script>
 <script src="/static/js/dom-utils.js"></script>
 <script src="/static/js/templates.js"></script>

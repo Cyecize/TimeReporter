@@ -43,7 +43,15 @@
     <script src="/static/js/date-picker.js"></script>
     <script>
         $(function () {
-            DatePickerPresets.datePickerFromToday(new DatePicker('.date-time-picker'));
+            const minDate = new Date();
+            minDate.setDate(1);
+
+            const picker = new DatePicker('.date-time-picker');
+
+            DatePickerPresets.datePicker(picker, false);
+            picker.setMinDate(minDate);
+
+            picker.initialize();
         });
     </script>
 {% endblock %}

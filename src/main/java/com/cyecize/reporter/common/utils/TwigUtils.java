@@ -9,6 +9,9 @@ import com.cyecize.summer.areas.template.annotations.TemplateService;
 import com.cyecize.summer.common.annotations.Autowired;
 import com.cyecize.summer.common.annotations.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +46,18 @@ public class TwigUtils {
     public String getDatabaseName(HttpRequest request) {
         if (!this.hasOrmConnection(request)) return null;
         return this.getConnection(request).getCredentials().getDatabaseName();
+    }
+
+    public String formatDate(LocalDateTime date) {
+        return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String formatDateTime(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+
+    public long millisFromDate(LocalDateTime dateTime) {
+        return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     private UserDbConnection getConnection(HttpRequest request) {

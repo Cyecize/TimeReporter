@@ -1,0 +1,29 @@
+<table class="table-style resizable-table hoverable-table sortable-table w-100" id="listProjectsTable">
+    <thead>
+    <tr class="table-style-row">
+        <th class="col-sortable searchable-col col-id" search-type="Id">
+            Id
+        </th>
+        <th class="col-sortable searchable-col" search-type="Project Name">
+            Project Name
+        </th>
+        <th class="col-sortable">
+            Start Date
+        </th>
+        <th class="col-sortable">
+            Completed
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for project in projects %}
+        <tr class="table-style-row" data-project-id="{{ project.id }}">
+            <td>{{ project.id }}</td>
+            <td>{{ project.projectName }}</td>
+            <td data-sort="{{ utils.millisFromDate(project.startDate) }}">{{ utils.formatDate(project.startDate) }}</td>
+            <td>{{ project.completed }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

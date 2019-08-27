@@ -2,6 +2,7 @@ package com.cyecize.reporter.app.controllers;
 
 import com.cyecize.reporter.app.bindingModels.CreateProjectBindingModel;
 import com.cyecize.reporter.app.services.ProjectService;
+import com.cyecize.reporter.app.viewModels.ListProjectsViewModel;
 import com.cyecize.reporter.common.controllers.BaseController;
 import com.cyecize.reporter.users.RoleConstants;
 import com.cyecize.reporter.users.services.UserService;
@@ -39,14 +40,16 @@ public class ProjectController extends BaseController {
     public ModelAndView myProjectsAction(Principal principal) {
         return super.view(
                 "projects/list.twig",
-                "projects",
-                this.projectService.findInvolved(this.userService.findOneByUsername(principal.getUser().getUsername()))
+                new ListProjectsViewModel(
+                        "My Projects",
+                        this.projectService.findInvolved(this.userService.findOneByUsername(principal.getUser().getUsername()))
+                )
         );
     }
 
     @GetMapping("/all")
     public ModelAndView allProjectsAction() {
-        return super.view("projects/list.twig", "projects", this.projectService.findAll());
+        return super.view("projects/list.twig", new ListProjectsViewModel("All Projects", this.projectService.findAll()));
     }
 
     @GetMapping("/create")
