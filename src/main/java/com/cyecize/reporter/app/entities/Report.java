@@ -31,10 +31,6 @@ public class Report {
     @JoinColumn(name = "task_id", referencedColumnName = "id", nullable = false)
     private Task task;
 
-    @ManyToOne(targetEntity = Project.class)
-    @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false)
-    private Project project;
-
     public Report() {
         this.setDateOfReport(LocalDateTime.now());
     }
@@ -85,13 +81,5 @@ public class Report {
 
     public void setTask(Task task) {
         this.task = task;
-    }
-
-    public Project getProject() {
-        return this.project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 }

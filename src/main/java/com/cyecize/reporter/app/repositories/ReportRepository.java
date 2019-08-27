@@ -7,6 +7,7 @@ import com.cyecize.reporter.common.repositories.BaseRepository;
 import com.cyecize.reporter.users.entities.User;
 import com.cyecize.summer.common.annotations.Service;
 
+import javax.persistence.criteria.Join;
 import java.util.List;
 
 @Service
@@ -14,11 +15,10 @@ public class ReportRepository extends BaseRepository<Report, Long> {
 
     private static final String REPORTER_FIELD = "reporter";
     private static final String TASK_FIELD = "task";
-    private static final String PROJECT_FIELD = "project";
 
     public Long findTotalReportedMinutesForProject(Project project) {
         return super.execute(reportActionResult -> reportActionResult.set(
-                super.entityManager.createQuery("SELECT SUM(r.reportedMinutes) FROM Report r WHERE r.project =:project", Long.class)
+                super.entityManager.createQuery("SELECT SUM(r.reportedMinutes) FROM Report r INNER JOIN r.task t WHERE t.project =:project", Long.class)
                         .setParameter("project", project)
                         .getSingleResult()
         ), Long.class).get();
@@ -26,7 +26,7 @@ public class ReportRepository extends BaseRepository<Report, Long> {
 
     public Long findTotalReportedMinutesForProjectAndUser(Project project, User reporter) {
         return super.execute(reportActionResult -> reportActionResult.set(
-                super.entityManager.createQuery("SELECT SUM(r.reportedMinutes) FROM Report r WHERE r.project =:project AND r.reporter = :reporter", Long.class)
+                super.entityManager.createQuery("SELECT SUM(r.reportedMinutes) FROM Report r INNER JOIN r.task t WHERE t.project =:project AND r.reporter = :reporter", Long.class)
                         .setParameter("project", project)
                         .setParameter("reporter", reporter)
                         .getSingleResult()
@@ -47,9 +47,13 @@ public class ReportRepository extends BaseRepository<Report, Long> {
     }
 
     public List<Report> findByReporterAndProject(User reporter, Project project) {
-        return super.queryBuilderList((qb, reportRoot) -> qb.where(
-                super.criteriaBuilder.equal(reportRoot.get(REPORTER_FIELD), reporter),
-                super.criteriaBuilder.equal(reportRoot.get(PROJECT_FIELD), project)
-        ));
+        return super.queryBuilderList((qb, reportRoot) -> {
+            Join<Report, Task> taskJoin = reportRoot.join(TASK_FIELD);
+
+            qb.where(
+                    super.criteriaBuilder.equal(reportRoot.get(REPORTER_FIELD), reporter),
+                    super.criteriaBuilder.equal(taskJoin.get("project"), project)
+            );
+        });
     }
 }
