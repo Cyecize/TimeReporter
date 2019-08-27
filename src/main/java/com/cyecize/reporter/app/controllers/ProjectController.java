@@ -97,6 +97,7 @@ public class ProjectController extends BaseController {
     }
 
     @GetMapping("/details/{id}")
+    @PreAuthorize(LOGGED_IN)
     public ModelAndView supplierDetailsAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("id") Project project, Principal principal, Model model) {
 
         final User loggedInUser = this.userService.findOneByUsername(principal.getUser().getUsername());
