@@ -1,0 +1,42 @@
+<table class="table-style resizable-table hoverable-table sortable-table w-100" id="listProjectsTable">
+    <thead>
+    <tr class="table-style-row">
+        <th class="col-sortable searchable-col col-id" search-type="Id">
+            Id
+        </th>
+        <th class="col-sortable searchable-col" search-type="Project Name">
+            Project Name
+        </th>
+        <th class="col-sortable">
+            Start Date
+        </th>
+        <th class="col-sortable">
+            Owner
+        </th>
+        <th class="col-sortable">
+            Main Tasks
+        </th>
+        <th class="col-sortable">
+            Total Reported Hours
+        </th>
+        <th class="col-sortable">
+            Completed
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for projectNode in projects %}
+        {% set project = projectNode.project %}
+        <tr class="table-style-row" data-project-id="{{ project.id }}">
+            <td>{{ project.id }}</td>
+            <td>{{ project.projectName }}</td>
+            <td data-sort="{{ utils.millisFromDate(project.startDate) }}">{{ utils.formatDate(project.startDate) }}</td>
+            <td>{{ project.owner.username }}</td>
+            <td>{{ projectNode.mainTasks.size }}</td>
+            <td>{{ projectNode.totalReportedHours }}</td>
+            <td>{{ project.completed }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

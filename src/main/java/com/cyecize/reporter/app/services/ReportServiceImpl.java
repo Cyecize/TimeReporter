@@ -1,5 +1,6 @@
 package com.cyecize.reporter.app.services;
 
+import com.cyecize.reporter.app.entities.Project;
 import com.cyecize.reporter.app.entities.Report;
 import com.cyecize.reporter.app.entities.Task;
 import com.cyecize.reporter.app.repositories.ReportRepository;
@@ -8,6 +9,7 @@ import com.cyecize.summer.common.annotations.Autowired;
 import com.cyecize.summer.common.annotations.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -17,6 +19,12 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     public ReportServiceImpl(ReportRepository repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public Long findTotalReportedHours(Project project) {
+        final Long minutes = Objects.requireNonNullElse(this.repository.findTotalReportedMinutesForProject(project), 0L);
+        return minutes / 60;
     }
 
     @Override

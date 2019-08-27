@@ -2,6 +2,10 @@ package com.cyecize.reporter.app.controllers;
 
 import com.cyecize.reporter.app.bindingModels.CreateProjectBindingModel;
 import com.cyecize.reporter.app.services.ProjectService;
+import com.cyecize.reporter.app.services.ReportService;
+import com.cyecize.reporter.app.services.TaskService;
+import com.cyecize.reporter.app.viewModels.DetailedProjectNode;
+import com.cyecize.reporter.app.viewModels.ListProjectsAdvancedViewModel;
 import com.cyecize.reporter.app.viewModels.ListProjectsViewModel;
 import com.cyecize.reporter.common.controllers.BaseController;
 import com.cyecize.reporter.users.RoleConstants;
@@ -18,6 +22,8 @@ import com.cyecize.summer.common.annotations.routing.RequestMapping;
 import com.cyecize.summer.common.models.ModelAndView;
 import com.cyecize.summer.common.models.RedirectAttributes;
 
+import java.util.stream.Collectors;
+
 import static com.cyecize.summer.areas.security.enums.AuthorizationType.LOGGED_IN;
 
 @Controller
@@ -29,10 +35,16 @@ public class ProjectController extends BaseController {
 
     private final UserService userService;
 
+    private final TaskService taskService;
+
+    private final ReportService reportService;
+
     @Autowired
-    public ProjectController(ProjectService projectService, UserService userService) {
+    public ProjectController(ProjectService projectService, UserService userService, TaskService taskService, ReportService reportService) {
         this.projectService = projectService;
         this.userService = userService;
+        this.taskService = taskService;
+        this.reportService = reportService;
     }
 
     @GetMapping("/my")
@@ -49,7 +61,15 @@ public class ProjectController extends BaseController {
 
     @GetMapping("/all")
     public ModelAndView allProjectsAction() {
-        return super.view("projects/list.twig", new ListProjectsViewModel("All Projects", this.projectService.findAll()));
+        return super.view(
+                "projects/list.twig",
+                new ListProjectsAdvancedViewModel(
+                        "All Projects",
+                        this.projectService.findAll().stream()
+                                .map(project -> new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedHours(project)))
+                                .collect(Collectors.toList())
+                )
+        );
     }
 
     @GetMapping("/create")
