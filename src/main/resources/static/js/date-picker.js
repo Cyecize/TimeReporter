@@ -18,12 +18,14 @@ function DatePicker(inputSelector) {
     const setAutoClose = (autoClose) => properties.autoClose = autoClose;
 
     const initialize = () => {
-        let el = $(inputSelector);
+        const el = $(inputSelector);
         el.datepicker(properties);
         el.attr('autocomplete', 'off');
         el.on('keydown', function (e) {
             e.preventDefault();
         });
+
+        return el;
     };
 
     return {

@@ -1,0 +1,51 @@
+{% extends '../base-layout.twig' %}
+
+{% block body %}
+    <div class="mr-auto mt-2 pt-3">
+        <h3>
+            Edit Project
+        </h3>
+        <form method="post">
+            <div class="form-group">
+                <label for="projectName">Project Name</label>
+                <input value="{{ model.projectName }}" type="text" id="projectName" name="projectName"
+                       class="form-control"
+                       required placeholder="Max 30 characters">
+                {% embed '../field-err.twig' with {fieldName: 'projectName'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="endDate">Project End Date</label>
+                <input type="text" id="endDate" name="endDate" class="form-control"
+                       placeholder="The final date of the project if applicant">
+                {% embed '../field-err.twig' with {fieldName: 'endDate'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="completed">Project Completed</label>
+                <input type="checkbox" id="completed" name="completed" {% if model.completed %} checked {% endif %}>
+                {% embed '../field-err.twig' with {fieldName: 'completed'} %} {% endembed %}
+            </div>
+
+            <div class="form-group text-right">
+                <button class="btn btn-info">Save</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/static/js/date-picker.js"></script>
+    <script>
+        $(function () {
+            const picker = new DatePicker('#endDate');
+            DatePickerPresets.datePicker(picker, false);
+
+            const dp = picker.initialize().data('datepicker');
+            const twigEndDate = '{{ utils.formatDateForJs(model.endDate) }}';
+            if (twigEndDate) {
+                dp.selectDate(new Date(twigEndDate));
+            }
+        });
+    </script>
+{% endblock %}

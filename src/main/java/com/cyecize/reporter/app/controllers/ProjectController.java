@@ -1,6 +1,7 @@
 package com.cyecize.reporter.app.controllers;
 
 import com.cyecize.reporter.app.bindingModels.CreateProjectBindingModel;
+import com.cyecize.reporter.app.bindingModels.EditProjectBindingModel;
 import com.cyecize.reporter.app.dataAdapters.IdToProjectAdapter;
 import com.cyecize.reporter.app.entities.Project;
 import com.cyecize.reporter.app.services.ProjectService;
@@ -14,6 +15,7 @@ import com.cyecize.reporter.users.RoleConstants;
 import com.cyecize.reporter.users.entities.User;
 import com.cyecize.reporter.users.services.UserService;
 import com.cyecize.summer.areas.security.annotations.PreAuthorize;
+import com.cyecize.summer.areas.security.interfaces.UserDetails;
 import com.cyecize.summer.areas.security.models.Principal;
 import com.cyecize.summer.areas.validation.annotations.ConvertedBy;
 import com.cyecize.summer.areas.validation.annotations.Valid;
@@ -109,5 +111,34 @@ public class ProjectController extends BaseController {
                 "viewModel",
                 new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedHours(project))
         );
+    }
+
+    @GetMapping("/edit/{id}")
+    public ModelAndView editGetAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("id") Project project, Principal principal) {
+        if (!this.isUserOwner(principal.getUser(), project)) {
+            return super.redirect("/");
+        }
+
+        return super.view("projects/edit.twig", "model", project);
+    }
+
+    @PostMapping("/edit/{id}")
+    public ModelAndView editPostAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("id") Project project, Principal principal,
+                                       @Valid EditProjectBindingModel bindingModel, BindingResult bindingResult) {
+        if (!this.isUserOwner(principal.getUser(), project)) {
+            return super.redirect("/");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return redirect("edit/" + project.getId());
+        }
+
+        this.projectService.editProject(project, bindingModel);
+
+        return super.redirect("details/" + project.getId());
+    }
+
+    private boolean isUserOwner(UserDetails user, Project project) {
+        return user.getUsername().equals(project.getOwner().getUsername());
     }
 }

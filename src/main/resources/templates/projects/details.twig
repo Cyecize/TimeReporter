@@ -7,7 +7,7 @@
         <div>
             <h3>Details</h3>
             {% if isOwner %}
-                <a href="#" class="btn btn-sm btn-info pt-0 pb-0">Edit</a>
+                <a href="{{ path("/projects/edit/" ~ project.id) }}" class="btn btn-sm btn-info pt-0 pb-0">Edit</a>
             {% endif %}
             <hr>
             <div class="row">

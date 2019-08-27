@@ -1,8 +1,10 @@
 package com.cyecize.reporter.app.services;
 
 import com.cyecize.reporter.app.bindingModels.CreateProjectBindingModel;
+import com.cyecize.reporter.app.bindingModels.EditProjectBindingModel;
 import com.cyecize.reporter.app.entities.Project;
 import com.cyecize.reporter.app.repositories.ProjectRepository;
+import com.cyecize.reporter.common.utils.ModelMerger;
 import com.cyecize.reporter.users.entities.User;
 import com.cyecize.summer.common.annotations.Autowired;
 import com.cyecize.summer.common.annotations.Service;
@@ -20,13 +22,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ModelMapper modelMapper;
 
+    private final ModelMerger modelMerger;
+
     private final ReportService reportService;
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository repository, ModelMapper modelMapper, ReportService reportService) {
+    public ProjectServiceImpl(ProjectRepository repository, ModelMapper modelMapper, ModelMerger modelMerger, ReportService reportService) {
         this.repository = repository;
         this.modelMapper = modelMapper;
+        this.modelMerger = modelMerger;
         this.reportService = reportService;
+    }
+
+    @Override
+    public void editProject(Project project, EditProjectBindingModel bindingModel) {
+        this.modelMerger.merge(bindingModel, project);
+        this.repository.merge(project);
     }
 
     @Override
