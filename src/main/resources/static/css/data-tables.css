@@ -105,6 +105,10 @@
     transition: all 0.1s;
 }
 
+.table-style .table-style-row .col-link {
+    cursor: pointer;
+}
+
 .table-style .table-style-row:hover td {
     color: black;
     background: rgba(62, 69, 81, 0.1);

@@ -22,8 +22,8 @@
     <tbody>
     {% for project in projects %}
         <tr class="table-style-row" data-project-id="{{ project.id }}">
-            <td>{{ project.id }}</td>
-            <td>{{ project.projectName }}</td>
+            <td class="col-link">{{ project.id }}</td>
+            <td class="col-link">{{ project.projectName }}</td>
             <td data-sort="{{ utils.millisFromDate(project.startDate) }}">{{ utils.formatDate(project.startDate) }}</td>
             <td>{{ project.owner.username }}</td>
             <td>{{ project.completed }}</td>

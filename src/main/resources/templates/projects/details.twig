@@ -1,0 +1,67 @@
+{% extends '../base-layout.twig' %}
+
+{% block body %}
+    {% set project = viewModel.project %}
+    {% set isOwner = project.owner.id == user.id %}
+    <div class="mr-auto mt-2 pt-3">
+        <div>
+            <h3>Details</h3>
+            {% if isOwner %}
+                <a href="#" class="btn btn-sm btn-info pt-0 pb-0">Edit</a>
+            {% endif %}
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row description-list">
+                        <dt class="col-md-4">Project Name:</dt>
+                        <dd class="col-md-8">{{ project.projectName }}</dd>
+                        <dt class="col-md-4">Start Date:</dt>
+                        <dd class="col-md-8">{{ utils.formatDate(project.startDate) }}</dd>
+                        <dt class="col-md-4">Owner:</dt>
+                        <dd class="col-md-8">{{ project.owner.username }}</dd>
+                        <dt class="col-md-4">Completed:</dt>
+                        <dd class="col-md-8">{% if project.completed %}Yes{% else %}No{% endif %}</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row description-list">
+                        {% if project.endDate %}
+                            <dt class="col-md-4">Project Duration:</dt>
+                            <dd class="col-md-8">
+                                {{ utils.calculateDaysDiff(project.startDate, project.endDate) }} Days
+                            </dd>
+                            <dt class="col-md-4">End Date:</dt>
+                            <dd class="col-md-8">{{ utils.formatDate(project.endDate) }}</dd>
+                        {% endif %}
+                        <dt class="col-md-4">Number of Tasks:</dt>
+                        <dd class="col-md-8">{{ viewModel.mainTasks.size }}</dd>
+                        <dt class="col-md-4">Total Reported Hours:</dt>
+                        <dd class="col-md-8">{{ viewModel.totalReportedHours }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        {% if myReports.size > 0 %}
+            <div>
+                <h3>My Reports</h3>
+                <hr>
+                <dl class="row description-list">
+                    <dt class="col-md-4">Total Reports:</dt>
+                    <dd class="col-md-8">{{ myReports.size }}</dd>
+                    <dt class="col-md-4">Total Reported Hours</dt>
+                    <dd class="col-md-8">{{ myReportsTotalHours }}</dd>
+                </dl>
+            </div>
+        {% endif %}
+
+        {% if isOwner %}
+            <div>
+                <h3>Tasks</h3>
+                <hr>
+                {% for task in viewModel.mainTasks %}
+                    <p>{{ task.taskName }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

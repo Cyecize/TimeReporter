@@ -60,6 +60,10 @@ public class TwigUtils {
         return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
+    public long calculateDaysDiff(LocalDateTime start, LocalDateTime end) {
+        return Math.abs(this.millisFromDate(start) - this.millisFromDate(end)) / 1000 / 60 / 60 / 24;
+    }
+
     private UserDbConnection getConnection(HttpRequest request) {
         return this.connectionStorageService.getDbConnection(request.getSession().getId());
     }
