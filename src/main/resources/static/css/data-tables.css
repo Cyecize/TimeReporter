@@ -1,0 +1,168 @@
+/* EditableTable */
+
+.table-container, .addable-table-container, .data-exportable-table-container {
+    position: relative;
+    overflow: scroll;
+}
+
+.addable-table-container .add-row-btn {
+    position: relative;
+    color: #070;
+    cursor: pointer;
+}
+
+.show-category-info, .show-parent-category-info, .show-product-info, .show-supplier-info {
+    /* Declared only to help with auto complete. */
+}
+
+.data-exportable-table-container .export-table-data-btn, .searchable-table-container .table-search-field {
+
+}
+
+.resizable-table, .editable-table, .addable-table, .sortable-table, .data-exportable-table, .searchable-table {
+    /* Declared only to help with auto complete. */
+}
+
+.data-exportable-table .exportable-col {
+
+}
+
+.sortable-table .col-sortable {
+    cursor: pointer;
+}
+
+.sortable-table .col-sortable:hover .col-sortable-icons {
+    opacity: 1;
+}
+
+.sortable-table .col-sortable .col-sortable-icons {
+    display: inline-block;
+
+    font-size: 0.8em;
+    opacity: 0.7;
+    padding-left: 2px;
+}
+
+.addable-table tr.addable-table-row-template {
+    display: none;
+}
+
+.addable-table .remove-row-btn {
+    color: #700 !important;
+    cursor: pointer;
+    text-align: center;
+}
+
+.addable-table .remove-row-btn:hover {
+    color: #f00 !important;
+}
+
+.editable-table .col-editable {
+
+}
+
+.searchable-table .searchable-col {
+
+}
+
+/* !Editable Table */
+
+/* Table Style */
+
+.hoverable-table {
+
+}
+
+.table-style tbody tr:nth-child(even) {
+    background-color: #e9faff;
+}
+
+.table-style, .table-checkbox {
+    /* Declared to enhance autocomplete. */
+}
+
+.table-style td {
+    transition: all 0.1s;
+    font-size: 0.7em;
+    color: rgba(49, 53, 61, 1);
+    line-height: 1.4;
+    position: relative;
+    border-right: 1px rgba(62, 69, 81, 0.1) solid;
+    border-bottom: 1px rgba(62, 69, 81, 0.1) solid;
+}
+
+.table-style th {
+    transition: all 0.1s;
+    font-size: 0.75em;
+    color: #fff;
+    background: rgba(49, 53, 61, 1);
+
+    padding: 5px;
+}
+
+.table-style .table-style-row {
+    transition: all 0.1s;
+}
+
+.table-style .table-style-row:hover td {
+    color: black;
+    background: rgba(62, 69, 81, 0.1);
+}
+
+.table-style .hovered-col {
+    color: black;
+}
+
+.table-style .hovered-col::before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background: rgba(76, 154, 255, 0.1);
+}
+
+.table-style .hovered-col-head {
+    background-color: rgba(62, 69, 81, 1) !important;
+    color: rgb(76, 154, 255);
+}
+
+.table-style .table-style-row td:hover {
+    color: black;
+}
+
+.table-style .table-style-row td:hover:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    border: 1px solid rgba(62, 69, 81, 1);
+}
+
+.table-style .col-id {
+    width: 40px;
+}
+
+.table-style .col-barcode {
+    width: 100px;
+}
+
+.table-style .col-checkbox {
+    width: 70px;
+    /* TODO: when translating tha app this value might no longer work properly */
+}
+
+.table-style .col-actions {
+    width: 70px;
+    text-align: center;
+}
+
+/* !Table Style */
+

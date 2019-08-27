@@ -1,0 +1,14 @@
+{{#if showLabel }}
+    <label for="{{ searchFieldId }}" class="d-inline">Search</label>
+{{/if}}
+
+<select id="{{ searchTypeId }}" class="btn btn-outline-info pr-2 pl-2"
+    {{# if hideOptions }}style="display: none;" {{/if}}>
+
+    <option selected style="font-size: 14px">All</option>
+    {{# each options }}
+        <option style="font-size: 14px">{{ this }}</option>
+    {{/each}}
+</select>
+
+<input id="{{ searchFieldId }}" type="text" class="table-search-field btn btn-outline-info text-left pr-2 pl-2">
