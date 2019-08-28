@@ -1,6 +1,7 @@
 package com.cyecize.reporter.app.entities;
 
 import com.cyecize.reporter.users.entities.User;
+import com.cyecize.summer.areas.security.interfaces.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -97,5 +98,9 @@ public class Project {
 
     public void setParticipants(List<User> participants) {
         this.participants = participants;
+    }
+
+    public boolean isParticipant(UserDetails user) {
+        return this.getParticipants().stream().anyMatch(p -> p.getUsername().equals(user.getUsername()));
     }
 }

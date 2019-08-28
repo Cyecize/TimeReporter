@@ -73,6 +73,9 @@
                 </div>
             </div>
             <br>
+        {% endif %}
+
+        {% if project.isParticipant(user) %}
             <div descr="Tasks">
                 <h3>Tasks</h3>
                 <hr class="mt-1 mb-1">
@@ -119,11 +122,13 @@
                 });
             };
 
-            {% if isOwner %}
-
+            {% if project.isParticipant(user) %}
             const tasksTable = document.getElementById('listTasksTable');
             const tasksSearchContainer = document.getElementById('projectTasksSearchContainer');
             SearchPresets.task(tasksTable, tasksSearchContainer);
+            {% endif %}
+
+            {% if isOwner %}
 
             const participantsTable = document.getElementById('listProjectParticipantsTable');
             const participantsSearchContainer = document.getElementById('participantsSearchButtonContainer');

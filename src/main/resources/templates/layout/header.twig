@@ -41,7 +41,7 @@
                 </li>
 
                 {% if user %}
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" descr="projects">
                         <a class="nav-link dropdown-toggle" href="#" id="projectsDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Projects
@@ -57,6 +57,23 @@
                                 </a>
                                 <a class="dropdown-item" href="{{ path("/projects/create") }}">
                                     New Project
+                                </a>
+                            {% endif %}
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown" descr="tasks">
+                        <a class="nav-link dropdown-toggle" href="#" id="tasksDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Tasks
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="tasksDropdown">
+                            <a class="dropdown-item" href="{{ path("/tasks/my") }}">
+                                My Tasks
+                            </a>
+                            {% if hasRole(adminRole) %}
+                                <a class="dropdown-item" href="{{ path("/tasks/create") }}">
+                                    New Task
                                 </a>
                             {% endif %}
                         </div>

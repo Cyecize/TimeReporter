@@ -1,0 +1,99 @@
+{% extends '../base-layout.twig' %}
+
+{% block body %}
+    <div class="mr-auto mt-2 pt-3">
+        <h3>New Task</h3>
+        <form method="post">
+
+            <div class="form-group">
+                <label for="project">Select Project</label>
+                <select name="project" id="project" required class="form-control selectize">
+                    <option value="" disabled selected>-- Choose --</option>
+                    {% for project in projects %}
+                        <option value="{{ project.id }}" {% if project.id == model.project.id %} selected {% endif %}>
+                            {{ project.projectName }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% embed '../field-err.twig' with {fieldName: 'project'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="parentTask">Parent Task
+                    <small>(Not required)</small>
+                </label>
+                <select name="parentTask" id="parentTask" class="form-control">
+                    <option value="" disabled selected>-- None --</option>
+                    <option value="Test222">Testche</option>
+                </select>
+                {% embed '../field-err.twig' with {fieldName: 'parentTask'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="taskName">Task Name</label>
+                <input value="{{ model.taskName }}" type="text" id="taskName" name="taskName" class="form-control"
+                       required placeholder="Max 30 characters">
+                {% embed '../field-err.twig' with {fieldName: 'taskName'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="startDate">Task Start Date</label>
+                <input value="{{ model.startDate }}" type="text" id="startDate" name="startDate"
+                       class="form-control date-time-picker" required placeholder="The starting date of the task">
+                {% embed '../field-err.twig' with {fieldName: 'startDate'} %} {% endembed %}
+            </div>
+
+            <div class="form-group">
+                <label for="endDate">Task End Date
+                    <small>( if applicable )</small>
+                </label>
+                <input value="{{ model.endDate }}" type="text" id="endDate" name="endDate"
+                       class="form-control date-time-picker" placeholder="Not required">
+                {% embed '../field-err.twig' with {fieldName: 'endDate'} %} {% endembed %}
+            </div>
+
+            <div class="form-group text-right">
+                <button class="btn btn-info">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/static/js/date-picker.js"></script>
+    <script>
+        $(function () {
+            const minDate = new Date();
+            minDate.setDate(1);
+
+            const picker = new DatePicker('.date-time-picker');
+
+            DatePickerPresets.datePicker(picker, false);
+            picker.setMinDate(minDate);
+
+            picker.initialize();
+
+            const projectSelect = $('#project');
+            const parentTaskSelectize = $('#parentTask').selectize({});
+            const parentTaskSelectizeInstance = parentTaskSelectize[0].selectize;
+
+            projectSelect.on('change', function (e) {
+                const projectId = $(this).val();
+
+                $.ajax({
+                    url: '{{ path('/tasks/project/') }}' + projectId,
+                    success: function (res) {
+                        parentTaskSelectizeInstance.clearOptions();
+
+                        res.response.items.forEach(task => {
+                            parentTaskSelectizeInstance.addOption({value: task.id, text: task.taskName});
+                        });
+                    },
+                    error: console.error,
+                });
+            });
+        });
+    </script>
+{% endblock %}
