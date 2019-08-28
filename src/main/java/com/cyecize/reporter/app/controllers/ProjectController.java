@@ -78,7 +78,7 @@ public class ProjectController extends BaseController {
                 new ListProjectsAdvancedViewModel(
                         "All Projects",
                         this.projectService.findAll().stream()
-                                .map(project -> new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedHours(project)))
+                                .map(project -> new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedTime(project)))
                                 .collect(Collectors.toList())
                 )
         );
@@ -108,17 +108,17 @@ public class ProjectController extends BaseController {
 
         final User loggedInUser = this.userService.findOneByUsername(principal.getUser().getUsername());
         model.addAttribute("myReports", this.reportService.findByReporterAndProject(loggedInUser, project));
-        model.addAttribute("myReportsTotalHours", this.reportService.findTotalReportedHoursForReporter(project, loggedInUser));
+        model.addAttribute("myReportsTotalHours", this.reportService.findTotalReportedTimeForReporter(project, loggedInUser));
 
         model.addAttribute("participants", project.getParticipants().stream()
-                .map(p -> new ProjectParticipantNode(p, this.reportService.findTotalReportedHoursForReporter(project, p)))
+                .map(p -> new ProjectParticipantNode(p, this.reportService.findTotalReportedTimeForReporter(project, p)))
                 .collect(Collectors.toList())
         );
 
         return super.view(
                 "projects/details.twig",
                 "viewModel",
-                new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedHours(project))
+                new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedTime(project))
         );
     }
 

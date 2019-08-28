@@ -34,7 +34,7 @@
             <td data-sort="{{ utils.millisFromDate(project.startDate) }}">{{ utils.formatDate(project.startDate) }}</td>
             <td>{{ project.owner.username }}</td>
             <td>{{ projectNode.mainTasks.size }}</td>
-            <td>{{ projectNode.totalReportedHours }}</td>
+            <td>{{ utils.formatReportedTime(projectNode.totalReportedTime) }}</td>
             <td>{{ project.completed }}</td>
         </tr>
     {% endfor %}

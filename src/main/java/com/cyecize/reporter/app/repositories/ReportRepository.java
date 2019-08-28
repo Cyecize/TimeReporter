@@ -33,6 +33,14 @@ public class ReportRepository extends BaseRepository<Report, Long> {
         ), Long.class).get();
     }
 
+    public Long findTotalReportedMinutesForTask(Task task) {
+        return super.execute(reportActionResult -> reportActionResult.set(
+                super.entityManager.createQuery("SELECT SUM(r.reportedMinutes) FROM  Report r WHERE r.task =:task", Long.class)
+                        .setParameter("task", task)
+                        .getSingleResult()
+        ), Long.class).get();
+    }
+
     public List<Report> findByReporter(User reporter) {
         return super.queryBuilderList((qb, reportRoot) -> qb.where(
                 super.criteriaBuilder.equal(reportRoot.get(REPORTER_FIELD), reporter))

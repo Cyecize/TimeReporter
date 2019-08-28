@@ -23,7 +23,7 @@
         <tr class="table-style-row" data-user-id="{{ user.id }}">
             <td class="col-link">{{ user.id }}</td>
             <td class="col-link">{{ user.username }}</td>
-            <td>{{ participant.totalReportedHours }}</td>
+            <td>{{ utils.formatReportedTime(participant.totalReportedTime) }}</td>
             <td><button class="remove-participant-btn" data-username="{{ user.username }}">Remove</button></td>
         </tr>
     {% endfor %}

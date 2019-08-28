@@ -37,7 +37,7 @@
                         <dt class="col-md-4">Number of Tasks:</dt>
                         <dd class="col-md-8">{{ viewModel.mainTasks.size }}</dd>
                         <dt class="col-md-4">Total Reported Hours:</dt>
-                        <dd class="col-md-8">{{ viewModel.totalReportedHours }}</dd>
+                        <dd class="col-md-8">{{ utils.formatReportedTime(viewModel.totalReportedTime) }}</dd>
                     </dl>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                     <dt class="col-md-4">Total Reports:</dt>
                     <dd class="col-md-8">{{ myReports.size }}</dd>
                     <dt class="col-md-4">Total Reported Hours</dt>
-                    <dd class="col-md-8">{{ myReportsTotalHours }}</dd>
+                    <dd class="col-md-8">{{ utils.formatReportedTime(myReportsTotalHours) }}</dd>
                 </dl>
             </div>
             <br>

@@ -68,6 +68,10 @@ public class TwigUtils {
         return Math.abs(this.millisFromDate(start) - this.millisFromDate(end)) / 1000 / 60 / 60 / 24;
     }
 
+    public String formatReportedTime(Pair<Long, Long> hourMinutePair) {
+        return String.format("%d hours and %d minutes", hourMinutePair.getKey(), hourMinutePair.getValue());
+    }
+
     private UserDbConnection getConnection(HttpRequest request) {
         return this.connectionStorageService.getDbConnection(request.getSession().getId());
     }
