@@ -1,0 +1,33 @@
+<table class="table-style resizable-table hoverable-table sortable-table w-100" id="listTasksTable">
+    <thead>
+    <tr class="table-style-row">
+        <th class="col-sortable searchable-col col-id" search-type="Id">
+            Id
+        </th>
+        <th class="col-sortable searchable-col" search-type="Task Name">
+            Task Name
+        </th>
+        <th class="col-sortable">
+            Start Date
+        </th>
+        <th class="col-sortable">
+            Completed
+        </th>
+        <th class="col-sortable">
+            Total Reported Time
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for task in tasks %}
+        <tr class="table-style-row" data-task-id="{{ task.id }}">
+            <td class="col-link">{{ task.id }}</td>
+            <td class="col-link">{{ task.taskName }}</td>
+            <td data-sort="{{ utils.millisFromDate(task.startDate) }}">{{ utils.formatDate(task.startDate) }}</td>
+            <td>{{ task.completed }}</td>
+            <td>{{ utils.formatReportedTime(task.totalReportedTime) }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

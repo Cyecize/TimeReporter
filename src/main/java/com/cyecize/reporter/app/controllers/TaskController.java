@@ -6,6 +6,7 @@ import com.cyecize.reporter.app.entities.Project;
 import com.cyecize.reporter.app.services.ProjectService;
 import com.cyecize.reporter.app.services.TaskService;
 import com.cyecize.reporter.app.viewModels.TaskViewModel;
+import com.cyecize.reporter.app.viewModels.TaskViewModelAdvanced;
 import com.cyecize.reporter.common.controllers.BaseController;
 import com.cyecize.reporter.users.RoleConstants;
 import com.cyecize.reporter.users.services.UserService;
@@ -82,6 +83,19 @@ public class TaskController extends BaseController {
                 this.taskService.findAllByProject(project).stream()
                         .map(task -> this.modelMapper.map(task, TaskViewModel.class))
                         .collect(Collectors.toList())
+        );
+    }
+
+    @GetMapping("/my")
+    public ModelAndView myTasksAction(Principal principal) {
+        return super.view("tables/tasks-advanced.twig", "tasks", this.taskService.findAllTasksForUser(
+                this.userService.findOneByUsername(principal.getUser().getUsername())).stream()
+                .map(t -> {
+                    TaskViewModelAdvanced viewModel = this.modelMapper.map(t, TaskViewModelAdvanced.class);
+                    viewModel.setTotalReportedTime(this.taskService.findTotalReportedTimeForTask(t));
+
+                    return viewModel;
+                }).collect(Collectors.toList())
         );
     }
 }
