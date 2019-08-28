@@ -18,11 +18,12 @@
     </thead>
 
     <tbody>
-    {% for user in users %}
+    {% for participant in participants %}
+        {% set user = participant.user %}
         <tr class="table-style-row" data-user-id="{{ user.id }}">
             <td class="col-link">{{ user.id }}</td>
             <td class="col-link">{{ user.username }}</td>
-            <td>TODO</td>
+            <td>{{ participant.totalReportedHours }}</td>
             <td><button class="remove-participant-btn" data-username="{{ user.username }}">Remove</button></td>
         </tr>
     {% endfor %}

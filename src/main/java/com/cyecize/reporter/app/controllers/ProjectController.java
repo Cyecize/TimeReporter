@@ -11,6 +11,7 @@ import com.cyecize.reporter.app.services.TaskService;
 import com.cyecize.reporter.app.viewModels.DetailedProjectNode;
 import com.cyecize.reporter.app.viewModels.ListProjectsAdvancedViewModel;
 import com.cyecize.reporter.app.viewModels.ListProjectsViewModel;
+import com.cyecize.reporter.app.viewModels.ProjectParticipantNode;
 import com.cyecize.reporter.common.controllers.BaseController;
 import com.cyecize.reporter.users.RoleConstants;
 import com.cyecize.reporter.users.dataAdapters.UsernameToUserAdapter;
@@ -108,6 +109,11 @@ public class ProjectController extends BaseController {
         final User loggedInUser = this.userService.findOneByUsername(principal.getUser().getUsername());
         model.addAttribute("myReports", this.reportService.findByReporterAndProject(loggedInUser, project));
         model.addAttribute("myReportsTotalHours", this.reportService.findTotalReportedHoursForReporter(project, loggedInUser));
+
+        model.addAttribute("participants", project.getParticipants().stream()
+                .map(p -> new ProjectParticipantNode(p, this.reportService.findTotalReportedHoursForReporter(project, p)))
+                .collect(Collectors.toList())
+        );
 
         return super.view(
                 "projects/details.twig",
