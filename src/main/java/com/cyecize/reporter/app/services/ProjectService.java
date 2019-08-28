@@ -11,6 +11,10 @@ public interface ProjectService {
 
     void editProject(Project project, EditProjectBindingModel bindingModel);
 
+    void addParticipantToProject(Project project, User participant);
+
+    boolean removeParticipantFromProject(Project project, User participant);
+
     Project findById(Long id);
 
     Project createProject(CreateProjectBindingModel bindingModel, User owner);

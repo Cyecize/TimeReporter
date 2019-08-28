@@ -41,6 +41,37 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public void addParticipantToProject(Project project, User participant) {
+        if (!this.isUserParticipant(project, participant)) {
+            project.getParticipants().add(participant);
+            this.repository.merge(project);
+        }
+    }
+
+    @Override
+    public boolean removeParticipantFromProject(Project project, User participant) {
+        if (this.isUserParticipant(project, participant) && !this.isUserProjectOwner(participant, project)) {
+            project.setParticipants(project.getParticipants().stream()
+                    .filter(p -> !p.getId().equals(participant.getId()))
+                    .collect(Collectors.toList())
+            );
+
+            this.repository.merge(project);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isUserParticipant(Project project, User user) {
+        return project.getParticipants().stream().anyMatch(u -> u.getId().equals(user.getId()));
+    }
+
+    private boolean isUserProjectOwner(User user, Project project) {
+        return project.getOwner().getId().equals(user.getId());
+    }
+
+    @Override
     public Project findById(Long id) {
         return this.repository.find(id);
     }
@@ -49,6 +80,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Project createProject(CreateProjectBindingModel bindingModel, User owner) {
         Project project = this.modelMapper.map(bindingModel, Project.class);
         project.setOwner(owner);
+        project.getParticipants().add(owner);
 
         this.repository.persist(project);
         return project;

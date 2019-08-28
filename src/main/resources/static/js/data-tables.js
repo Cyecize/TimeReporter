@@ -164,16 +164,25 @@ const DataTableGridUtils = (() => {
      */
     const initRemoveRowEvents = (table) => {
 
-        //Used this since rows can be appended at runtime.
-        table.on('click', 'td.remove-row-btn', function (e) {
-            let parent = $(this).parent();
-            let rowId = parent.data('row-id');
+        const removeRow = (row) => {
+            const rowId = row.data('row-id');
 
             if (window.onTableRowRemove) {
                 window.onTableRowRemove(table, this, rowId);
             }
 
-            parent.remove();
+            row.remove();
+        };
+
+        //Used this since rows can be appended at runtime.
+        table.on('click', 'td.remove-row-btn', function (e) {
+            const parent = $(this).parent();
+            removeRow(parent);
+        });
+
+        table.on('click', 'td > .remove-row-btn', function (e) {
+            const parent = $(this).parent().parent();
+            removeRow(parent);
         });
     };
 

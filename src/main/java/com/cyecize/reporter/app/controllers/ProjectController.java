@@ -1,5 +1,6 @@
 package com.cyecize.reporter.app.controllers;
 
+import com.cyecize.http.HttpStatus;
 import com.cyecize.reporter.app.bindingModels.CreateProjectBindingModel;
 import com.cyecize.reporter.app.bindingModels.EditProjectBindingModel;
 import com.cyecize.reporter.app.dataAdapters.IdToProjectAdapter;
@@ -12,6 +13,7 @@ import com.cyecize.reporter.app.viewModels.ListProjectsAdvancedViewModel;
 import com.cyecize.reporter.app.viewModels.ListProjectsViewModel;
 import com.cyecize.reporter.common.controllers.BaseController;
 import com.cyecize.reporter.users.RoleConstants;
+import com.cyecize.reporter.users.dataAdapters.UsernameToUserAdapter;
 import com.cyecize.reporter.users.entities.User;
 import com.cyecize.reporter.users.services.UserService;
 import com.cyecize.summer.areas.security.annotations.PreAuthorize;
@@ -26,6 +28,7 @@ import com.cyecize.summer.common.annotations.routing.GetMapping;
 import com.cyecize.summer.common.annotations.routing.PathVariable;
 import com.cyecize.summer.common.annotations.routing.PostMapping;
 import com.cyecize.summer.common.annotations.routing.RequestMapping;
+import com.cyecize.summer.common.models.JsonResponse;
 import com.cyecize.summer.common.models.Model;
 import com.cyecize.summer.common.models.ModelAndView;
 import com.cyecize.summer.common.models.RedirectAttributes;
@@ -136,6 +139,38 @@ public class ProjectController extends BaseController {
         this.projectService.editProject(project, bindingModel);
 
         return super.redirect("details/" + project.getId());
+    }
+
+    @PostMapping("/{projectId}/add/{username}")
+    public JsonResponse addParticipantAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("projectId") Project project, Principal principal,
+                                             @ConvertedBy(UsernameToUserAdapter.class) @PathVariable(value = "username", required = false) User participant) {
+        if (!this.isUserOwner(principal.getUser(), project)) {
+            return new JsonResponse().setStatusCode(HttpStatus.UNAUTHORIZED).addAttribute("message", "This is not your project!");
+        }
+
+        if (participant == null) {
+            return new JsonResponse().addAttribute("message", "Invalid Username!");
+        }
+
+        this.projectService.addParticipantToProject(project, participant);
+
+        return new JsonResponse().addAttribute("message", "Participant added!");
+    }
+
+    @PostMapping("/{projectId}/remove/{username}")
+    public JsonResponse removeParticipantAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("projectId") Project project, Principal principal,
+                                                @ConvertedBy(UsernameToUserAdapter.class) @PathVariable(value = "username", required = false) User participant) {
+        if (!this.isUserOwner(principal.getUser(), project)) {
+            return new JsonResponse().setStatusCode(HttpStatus.UNAUTHORIZED).addAttribute("message", "This is not your project!");
+        }
+
+        if (participant == null) {
+            return new JsonResponse().addAttribute("message", "Invalid Username!");
+        }
+
+        this.projectService.removeParticipantFromProject(project, participant);
+
+        return new JsonResponse().addAttribute("message", "Participant removed!");
     }
 
     private boolean isUserOwner(UserDetails user, Project project) {

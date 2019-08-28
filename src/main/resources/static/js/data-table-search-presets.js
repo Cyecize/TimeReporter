@@ -25,5 +25,17 @@ const SearchPresets = (() => {
                 searchFieldId: 'searchTasksField',
             });
         },
+
+        participants(table, container) {
+            TableUtils.createSearchBarForTable(table, container, {
+                showLabel: true,
+                hideOptions: false,
+                options: [
+                    'Id',
+                    'Username',
+                ],
+                searchFieldId: 'searchParticipantsField',
+            });
+        },
     };
 })();

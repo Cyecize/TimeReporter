@@ -1,0 +1,43 @@
+<table class="table-style addable-table resizable-table hoverable-table sortable-table w-100"
+       id="listProjectParticipantsTable">
+    <thead>
+    <tr class="table-style-row">
+        <th class="col-sortable searchable-col col-id" search-type="Id">
+            Id
+        </th>
+        <th class="col-sortable searchable-col" search-type="Username">
+            Username
+        </th>
+        <th class="col-sortable">
+            Reported Hours
+        </th>
+        <th class="col-sortable">
+            Actions
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for user in users %}
+        <tr class="table-style-row" data-user-id="{{ user.id }}">
+            <td class="col-link">{{ user.id }}</td>
+            <td class="col-link">{{ user.username }}</td>
+            <td>TODO</td>
+            <td><button class="remove-participant-btn" data-username="{{ user.username }}">Remove</button></td>
+        </tr>
+    {% endfor %}
+
+    <tr class="table-style-row addable-table-row-template">
+        <td class="col-link"></td>
+        <td class="">
+            <input type="text" class="form-control form-control-sm enter-participant-name" placeholder="Type Username">
+        </td>
+        <td></td>
+        <td>
+            <button class="remove-row-btn">Cancel</button>
+            <button class="add-participant-btn">Save</button>
+        </td>
+    </tr>
+
+    </tbody>
+</table>

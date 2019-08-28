@@ -4,6 +4,8 @@ import com.cyecize.reporter.users.entities.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "projects")
@@ -30,8 +32,15 @@ public class Project {
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
 
+    @ManyToMany(targetEntity = User.class, cascade = CascadeType.REMOVE)
+    @JoinTable(name = "projects_participants",
+            joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private List<User> participants;
+
     public Project() {
-       this.setCompleted(false);
+        this.setCompleted(false);
+        this.participants = new ArrayList<>();
     }
 
     public Long getId() {
@@ -80,5 +89,13 @@ public class Project {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public List<User> getParticipants() {
+        return this.participants;
+    }
+
+    public void setParticipants(List<User> participants) {
+        this.participants = participants;
     }
 }
