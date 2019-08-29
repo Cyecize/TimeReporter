@@ -25,4 +25,12 @@
     <script src="/static/js/data-table-search-presets.js"></script>
     <script src="/static/js/data-table-linking.js"></script>
 
+    <script>
+        $(function () {
+            const tasksTable = document.getElementById('listTasksTable');
+            const tasksSearchContainer = document.getElementById('searchBarContainer');
+
+            SearchPresets.task(tasksTable, tasksSearchContainer);
+        });
+    </script>
 {% endblock %}

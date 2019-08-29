@@ -66,7 +66,12 @@
 
     <script>
         $(function () {
+            {% if subtasks.size > 0 %}
+            const tasksTable = document.getElementById('listTasksTable');
+            const tasksSearchContainer = document.getElementById('subTasksSearchButtonContainer');
 
+            SearchPresets.task(tasksTable, tasksSearchContainer);
+            {% endif %}
         });
     </script>
 {% endblock %}
