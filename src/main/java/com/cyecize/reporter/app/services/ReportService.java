@@ -1,5 +1,6 @@
 package com.cyecize.reporter.app.services;
 
+import com.cyecize.reporter.app.bindingModels.ReportBindingModel;
 import com.cyecize.reporter.app.entities.Project;
 import com.cyecize.reporter.app.entities.Report;
 import com.cyecize.reporter.app.entities.Task;
@@ -9,6 +10,8 @@ import com.cyecize.reporter.users.entities.User;
 import java.util.List;
 
 public interface ReportService {
+
+    void report(ReportBindingModel bindingModel, User loggedInUser);
 
     Pair<Long, Long> findTotalReportedTime(Project project);
 

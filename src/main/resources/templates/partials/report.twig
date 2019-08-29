@@ -11,16 +11,19 @@
             <select name="task" id="selectTask" class="selectize-task form-control form-control-sm" required>
                 <option value="" disabled selected>-- Select Task --</option>
             </select>
+            {% embed '../field-err.twig' with {fieldName: 'task'} %} {% endembed %}
         </div>
         <div class="col-md-2">
             <div class="row">
                 <div class="col-sm-6">
                     <label for="selectHours">Hours</label>
                     <input name="hours" id="selectHours" type="number" min="0" step="1" required value="0" class="form-control form-control-sm">
+                    {% embed '../field-err.twig' with {fieldName: 'hours'} %} {% endembed %}
                 </div>
                 <div class="col-sm-6">
                     <label for="selectMinutes">Minutes</label>
                     <input name="minutes" id="selectMinutes" type="number" min="0" max="59" step="1" required value="0" class="form-control form-control-sm">
+                    {% embed '../field-err.twig' with {fieldName: 'minutes'} %} {% endembed %}
                 </div>
             </div>
         </div>
@@ -29,10 +32,12 @@
                 <div class="col-sm-6">
                     <label for="reportedDateTime">Date <small>(optional)</small></label>
                     <input name="dateOfReport" type="text" id="reportedDateTime" class="form-control form-control-sm">
+                    {% embed '../field-err.twig' with {fieldName: 'dateOfReport'} %} {% endembed %}
                 </div>
                 <div class="col-sm-6">
                     <label for="reportComment">Comment <small>(optional)</small></label>
                     <input name="comment" type="text" maxlength="255" id="reportComment" class="form-control form-control-sm">
+                    {% embed '../field-err.twig' with {fieldName: 'comment'} %} {% endembed %}
                 </div>
             </div>
         </div>
