@@ -26,6 +26,9 @@
 
 </body>
 <script>
+    {% if user %}
+        const USER_ID = {{ user.id }};
+    {% endif %}
     $(function () {
         $('.selectize').selectize({});
     });

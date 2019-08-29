@@ -8,12 +8,10 @@ import com.cyecize.reporter.app.entities.Project;
 import com.cyecize.reporter.app.services.ProjectService;
 import com.cyecize.reporter.app.services.ReportService;
 import com.cyecize.reporter.app.services.TaskService;
-import com.cyecize.reporter.app.viewModels.DetailedProjectNode;
-import com.cyecize.reporter.app.viewModels.ListProjectsAdvancedViewModel;
-import com.cyecize.reporter.app.viewModels.ListProjectsViewModel;
-import com.cyecize.reporter.app.viewModels.ProjectParticipantNode;
+import com.cyecize.reporter.app.viewModels.*;
 import com.cyecize.reporter.common.controllers.BaseController;
 import com.cyecize.reporter.users.RoleConstants;
+import com.cyecize.reporter.users.dataAdapters.IdToUserAdapter;
 import com.cyecize.reporter.users.dataAdapters.UsernameToUserAdapter;
 import com.cyecize.reporter.users.entities.User;
 import com.cyecize.reporter.users.services.UserService;
@@ -33,6 +31,7 @@ import com.cyecize.summer.common.models.JsonResponse;
 import com.cyecize.summer.common.models.Model;
 import com.cyecize.summer.common.models.ModelAndView;
 import com.cyecize.summer.common.models.RedirectAttributes;
+import org.modelmapper.ModelMapper;
 
 import java.util.stream.Collectors;
 
@@ -51,12 +50,15 @@ public class ProjectController extends BaseController {
 
     private final ReportService reportService;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    public ProjectController(ProjectService projectService, UserService userService, TaskService taskService, ReportService reportService) {
+    public ProjectController(ProjectService projectService, UserService userService, TaskService taskService, ReportService reportService, ModelMapper modelMapper) {
         this.projectService = projectService;
         this.userService = userService;
         this.taskService = taskService;
         this.reportService = reportService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/my")
@@ -177,6 +179,17 @@ public class ProjectController extends BaseController {
         this.projectService.removeParticipantFromProject(project, participant);
 
         return new JsonResponse().addAttribute("message", "Participant removed!");
+    }
+
+    @GetMapping("/involved/{userId}")
+    @PreAuthorize(LOGGED_IN)
+    public JsonResponse findInvolvedProjectsForUserAction(@ConvertedBy(IdToUserAdapter.class) @PathVariable("userId") User user) {
+        return new JsonResponse().addAttribute(
+                "items",
+                this.projectService.findInvolved(user).stream()
+                        .map(p -> this.modelMapper.map(p, ProjectViewModel.class))
+                        .collect(Collectors.toList())
+        );
     }
 
     private boolean isUserOwner(UserDetails user, Project project) {

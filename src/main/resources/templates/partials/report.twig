@@ -1,0 +1,43 @@
+<form id="reportTimeForm" method="post" action="{{ path("/reports/report") }}">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="selectProject">Project</label>
+            <select id="selectProject" class="selectize-project form-control form-control-sm">
+                <option value="" disabled selected>-- Select Project --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="selectTask">Task</label>
+            <select name="task" id="selectTask" class="selectize-task form-control form-control-sm" required>
+                <option value="" disabled selected>-- Select Task --</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="selectHours">Hours</label>
+                    <input name="hours" id="selectHours" type="number" min="0" step="1" required value="0" class="form-control form-control-sm">
+                </div>
+                <div class="col-sm-6">
+                    <label for="selectMinutes">Minutes</label>
+                    <input name="minutes" id="selectMinutes" type="number" min="0" max="59" step="1" required value="0" class="form-control form-control-sm">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="reportedDateTime">Date <small>(optional)</small></label>
+                    <input name="dateOfReport" type="text" id="reportedDateTime" class="form-control form-control-sm">
+                </div>
+                <div class="col-sm-6">
+                    <label for="reportComment">Comment <small>(optional)</small></label>
+                    <input name="comment" type="text" maxlength="255" id="reportComment" class="form-control form-control-sm">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group text-right mt-2">
+        <button class="btn btn-sm btn-success" type="submit">Report</button>
+    </div>
+</form>
