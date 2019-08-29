@@ -10,9 +10,7 @@ import com.cyecize.summer.common.annotations.Autowired;
 import com.cyecize.summer.common.annotations.Service;
 import org.modelmapper.ModelMapper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,14 +22,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ModelMerger modelMerger;
 
-    private final ReportService reportService;
-
     @Autowired
-    public ProjectServiceImpl(ProjectRepository repository, ModelMapper modelMapper, ModelMerger modelMerger, ReportService reportService) {
+    public ProjectServiceImpl(ProjectRepository repository, ModelMapper modelMapper, ModelMerger modelMerger) {
         this.repository = repository;
         this.modelMapper = modelMapper;
         this.modelMerger = modelMerger;
-        this.reportService = reportService;
     }
 
     @Override
@@ -92,19 +87,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> findInvolved(User involvedUser) {
-        final Map<Long, Project> projects = this.findByOwner(involvedUser)
-                .stream()
-                .collect(Collectors.toMap(Project::getId, project -> project));
-
-        this.reportService.findByReporter(involvedUser).forEach(report -> {
-            final Project project = report.getTask().getProject();
-            if (!projects.containsKey(project.getId())) {
-                projects.put(project.getId(), project);
-            }
-        });
-
-        return new ArrayList<>(projects.values());
+    public List<Project> findInvolved(User involvedUser, boolean skipCompleted) {
+        return this.repository.findByParticipant(involvedUser, skipCompleted);
     }
 
     @Override

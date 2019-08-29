@@ -68,7 +68,8 @@ public class ProjectController extends BaseController {
                 "projects/list.twig",
                 new ListProjectsViewModel(
                         "My Projects",
-                        this.projectService.findInvolved(this.userService.findOneByUsername(principal.getUser().getUsername()))
+                        //TODO skip completed AUTO
+                        this.projectService.findInvolved(this.userService.findOneByUsername(principal.getUser().getUsername()), false)
                 )
         );
     }
@@ -186,7 +187,8 @@ public class ProjectController extends BaseController {
     public JsonResponse findInvolvedProjectsForUserAction(@ConvertedBy(IdToUserAdapter.class) @PathVariable("userId") User user) {
         return new JsonResponse().addAttribute(
                 "items",
-                this.projectService.findInvolved(user).stream()
+                //TODO skip completed AUTO
+                this.projectService.findInvolved(user, false).stream()
                         .map(p -> this.modelMapper.map(p, ProjectViewModel.class))
                         .collect(Collectors.toList())
         );

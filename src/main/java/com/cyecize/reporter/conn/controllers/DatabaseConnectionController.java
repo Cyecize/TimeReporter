@@ -188,8 +188,11 @@ public class DatabaseConnectionController extends BaseController {
      */
     @GetMapping(DISABLE_JPA_CACHE_ROUTE)
     @PreAuthorize(AuthorizationType.LOGGED_IN)
-    public JsonResponse refreshDbCacheAction() {
-        return new JsonResponse();
+//    public JsonResponse refreshDbCacheAction() {
+//        return new JsonResponse();
+//    }
+    public ModelAndView refreshDbCacheAction() {
+        return super.redirect("/");
     }
 
     private ModelAndView handleStoredDbCredentials(HttpSoletRequest request) {

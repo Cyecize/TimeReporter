@@ -21,7 +21,7 @@ public interface ProjectService {
 
     List<Project> findByOwner(User owner);
 
-    List<Project> findInvolved(User involvedUser);
+    List<Project> findInvolved(User involvedUser, boolean skipCompleted);
 
     List<Project> findAll();
 
