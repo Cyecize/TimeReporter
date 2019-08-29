@@ -40,8 +40,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void editTask(Task task, EditTaskBindingModel bindingModel) {
         this.modelMerger.merge(bindingModel, task);
-        if (bindingModel.getParentTask() != null && !bindingModel.getParentTask().getProject().getId().equals(task.getProject().getId())) {
-            throw new RuntimeException("This parent task does not belong to thing project!");
+        if (bindingModel.getParentTask() != null) {
+            final Task parentTask = task.getParentTask();
+
+            if (parentTask.getId().equals(task.getId()) || !parentTask.getProject().getId().equals(task.getProject().getId())) {
+                task.setParentTask(null);
+            }
         }
 
         this.repository.merge(task);
