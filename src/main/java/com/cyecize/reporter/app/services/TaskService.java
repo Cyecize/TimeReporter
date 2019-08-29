@@ -12,6 +12,8 @@ public interface TaskService {
 
     Pair<Long, Long> findTotalReportedTimeForTask(Task task);
 
+    Pair<Long, Long> findTotalReportedTimeForTask(Task task, User user);
+
     Pair<Long, Long> findTotalReportedTimeForTaskRecursive(Task task);
 
     Task createTask(CreateTaskBindingModel bindingModel);

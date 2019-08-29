@@ -72,6 +72,10 @@ public class TwigUtils {
         return String.format("%d hours and %d minutes", hourMinutePair.getKey(), hourMinutePair.getValue());
     }
 
+    public String sortReportedTime(Pair<Long, Long> hourMinutePair) {
+        return String.valueOf(hourMinutePair.getKey() * 60 + hourMinutePair.getValue());
+    }
+
     private UserDbConnection getConnection(HttpRequest request) {
         return this.connectionStorageService.getDbConnection(request.getSession().getId());
     }

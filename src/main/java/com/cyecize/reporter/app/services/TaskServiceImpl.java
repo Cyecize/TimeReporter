@@ -38,6 +38,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Pair<Long, Long> findTotalReportedTimeForTask(Task task, User user) {
+        return this.reportService.findTotalReportedTimeForTask(task, user);
+    }
+
+    @Override
     public Pair<Long, Long> findTotalReportedTimeForTaskRecursive(Task task) {
         Long minutes = this.findTotalReportedMinutesForTaskRecursive(task, 0L);
         return new Pair<>(minutes / 60, minutes % 60);

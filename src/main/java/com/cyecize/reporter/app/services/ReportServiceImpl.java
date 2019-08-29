@@ -41,6 +41,12 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    public Pair<Long, Long> findTotalReportedTimeForTask(Task task, User reporter) {
+        final Long minutes = Objects.requireNonNullElse(this.repository.findTotalReportedMinutesForTaskAndUser(task, reporter), 0L);
+        return new Pair<>(minutes / 60, minutes % 60);
+    }
+
+    @Override
     public List<Report> findByReporter(User reporter) {
         return this.repository.findByReporter(reporter);
     }

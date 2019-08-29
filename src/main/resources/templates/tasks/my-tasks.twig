@@ -1,0 +1,27 @@
+{% extends '../base-layout.twig' %}
+
+{% block body %}
+    <div class="mr-auto mt-2 pt-3">
+        <div class="row pb-2">
+            <div class="col-md-6">
+                <h3>My Tasks
+                    <small>( {{ tasks.size }} )</small>
+                </h3>
+            </div>
+            <div class="col-md-6 text-right">
+                <div id="searchBarContainer"></div>
+            </div>
+        </div>
+        {% embed '../tables/tasks-advanced.twig' with {'tasks': tasks} %} {% endembed %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/static/css/data-tables.css">
+{% endblock %}
+
+{% block javascripts %}
+<script src="/static/js/data-tables.js"></script>
+<script src="/static/js/data-table-search-presets.js"></script>
+
+{% endblock %}

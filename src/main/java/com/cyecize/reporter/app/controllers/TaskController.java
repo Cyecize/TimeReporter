@@ -9,6 +9,7 @@ import com.cyecize.reporter.app.viewModels.TaskViewModel;
 import com.cyecize.reporter.app.viewModels.TaskViewModelAdvanced;
 import com.cyecize.reporter.common.controllers.BaseController;
 import com.cyecize.reporter.users.RoleConstants;
+import com.cyecize.reporter.users.entities.User;
 import com.cyecize.reporter.users.services.UserService;
 import com.cyecize.summer.areas.security.annotations.PreAuthorize;
 import com.cyecize.summer.areas.security.models.Principal;
@@ -88,11 +89,12 @@ public class TaskController extends BaseController {
 
     @GetMapping("/my")
     public ModelAndView myTasksAction(Principal principal) {
-        return super.view("tables/tasks-advanced.twig", "tasks", this.taskService.findAllTasksForUser(
-                this.userService.findOneByUsername(principal.getUser().getUsername())).stream()
+        final User loggedInUser = this.userService.findOneByUsername(principal.getUser().getUsername());
+
+        return super.view("tasks/my-tasks.twig", "tasks", this.taskService.findAllTasksForUser(loggedInUser).stream()
                 .map(t -> {
                     TaskViewModelAdvanced viewModel = this.modelMapper.map(t, TaskViewModelAdvanced.class);
-                    viewModel.setTotalReportedTime(this.taskService.findTotalReportedTimeForTask(t));
+                    viewModel.setTotalReportedTime(this.taskService.findTotalReportedTimeForTask(t, loggedInUser));
 
                     return viewModel;
                 }).collect(Collectors.toList())

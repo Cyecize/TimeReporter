@@ -26,7 +26,7 @@
             <td class="col-link">{{ task.taskName }}</td>
             <td data-sort="{{ utils.millisFromDate(task.startDate) }}">{{ utils.formatDate(task.startDate) }}</td>
             <td>{{ task.completed }}</td>
-            <td>{{ utils.formatReportedTime(task.totalReportedTime) }}</td>
+            <td data-sort="{{ utils.sortReportedTime(task.totalReportedTime) }}">{{ utils.formatReportedTime(task.totalReportedTime) }}</td>
         </tr>
     {% endfor %}
     </tbody>

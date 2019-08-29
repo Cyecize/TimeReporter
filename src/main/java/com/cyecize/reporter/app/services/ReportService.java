@@ -16,6 +16,8 @@ public interface ReportService {
 
     Pair<Long, Long> findTotalReportedTimeForTask(Task task);
 
+    Pair<Long, Long> findTotalReportedTimeForTask(Task task, User reporter);
+
     List<Report> findByReporter(User reporter);
 
     List<Report> findByReporter(User reporter, Task task);
