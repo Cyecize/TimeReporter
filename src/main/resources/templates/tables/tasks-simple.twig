@@ -19,8 +19,8 @@
     <tbody>
     {% for task in tasks %}
         <tr class="table-style-row" data-task-id="{{ task.id }}">
-            <td class="col-link">{{ task.id }}</td>
-            <td class="col-link">{{ task.taskName }}</td>
+            <td class="col-link col-task-link">{{ task.id }}</td>
+            <td class="col-link col-task-link">{{ task.taskName }}</td>
             <td data-sort="{{ utils.millisFromDate(task.startDate) }}">{{ utils.formatDate(task.startDate) }}</td>
             <td>{{ task.completed }}</td>
         </tr>

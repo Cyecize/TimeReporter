@@ -1,0 +1,72 @@
+{% extends '../base-layout.twig' %}
+
+{% block body %}
+    {% set task = viewModel.task %}
+    {% set subtasks = viewModel.subTasks %}
+    <div class="mr-auto mt-2 pt-3">
+        <div>
+            <h3>Details</h3>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row description-list">
+                        <dt class="col-md-4">Task Name:</dt>
+                        <dd class="col-md-8">{{ task.taskName }}</dd>
+                        <dt class="col-md-4">Start Date:</dt>
+                        <dd class="col-md-8">{{ utils.formatDate(task.startDate) }}</dd>
+                        <dt class="col-md-4">Completed:</dt>
+                        <dd class="col-md-8">{% if task.completed %}Yes{% else %}No{% endif %}</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row description-list">
+                        {% if task.endDate %}
+                            <dt class="col-md-4">Task Duration:</dt>
+                            <dd class="col-md-8">
+                                {{ utils.calculateDaysDiff(task.startDate, task.endDate) }} Days
+                            </dd>
+                            <dt class="col-md-4">End Date:</dt>
+                            <dd class="col-md-8">{{ utils.formatDate(task.endDate) }}</dd>
+                        {% endif %}
+                        <dt class="col-md-4">Number of Tasks:</dt>
+                        <dd class="col-md-8">{{ viewModel.mainTasks.size }}</dd>
+                        <dt class="col-md-4">Total Reported Hours:</dt>
+                        <dd class="col-md-8">{{ utils.formatReportedTime(task.totalReportedTime) }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        {% if subtasks.size > 0 %}
+            <div descr="Subtasks">
+                <div class="mt-1 addable-table-container">
+                    <h3>Subtasks</h3>
+                    <hr class="mt-1 mb-1">
+                    <div class="row pb-2">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6 text-right">
+                            <div id="subTasksSearchButtonContainer"></div>
+                        </div>
+                    </div>
+                    {% embed '../tables/tasks-advanced.twig' with {'tasks': subtasks} %} {% endembed %}
+                </div>
+            </div>
+            <br>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/static/css/data-tables.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/static/js/data-tables.js"></script>
+    <script src="/static/js/data-table-search-presets.js"></script>
+    <script src="/static/js/data-table-linking.js"></script>
+
+    <script>
+        $(function () {
+
+        });
+    </script>
+{% endblock %}

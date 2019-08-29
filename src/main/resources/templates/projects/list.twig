@@ -23,6 +23,7 @@
 {% block javascripts %}
     <script src="/static/js/data-tables.js"></script>
     <script src="/static/js/data-table-search-presets.js"></script>
+    <script src="/static/js/data-table-linking.js"></script>
 
     <script>
         $(function () {
@@ -31,10 +32,6 @@
 
             SearchPresets.project(table, container);
 
-            $('.col-link').on('click', function (e) {
-                const id = $(this).parent().data('project-id');
-                location.href = "{{ path("/projects/details/") }}" + id;
-            });
         });
     </script>
 {% endblock %}
