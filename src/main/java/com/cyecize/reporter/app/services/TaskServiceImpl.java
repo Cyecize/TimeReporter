@@ -1,10 +1,12 @@
 package com.cyecize.reporter.app.services;
 
 import com.cyecize.reporter.app.bindingModels.CreateTaskBindingModel;
+import com.cyecize.reporter.app.bindingModels.EditTaskBindingModel;
 import com.cyecize.reporter.app.entities.Project;
 import com.cyecize.reporter.app.entities.Report;
 import com.cyecize.reporter.app.entities.Task;
 import com.cyecize.reporter.app.repositories.TaskRepository;
+import com.cyecize.reporter.common.utils.ModelMerger;
 import com.cyecize.reporter.common.utils.Pair;
 import com.cyecize.reporter.users.entities.User;
 import com.cyecize.summer.common.annotations.Autowired;
@@ -23,13 +25,26 @@ public class TaskServiceImpl implements TaskService {
 
     private final ModelMapper modelMapper;
 
+    private final ModelMerger modelMerger;
+
     private final ReportService reportService;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository repository, ModelMapper modelMapper, ReportService reportService) {
+    public TaskServiceImpl(TaskRepository repository, ModelMapper modelMapper, ModelMerger modelMerger, ReportService reportService) {
         this.repository = repository;
         this.modelMapper = modelMapper;
+        this.modelMerger = modelMerger;
         this.reportService = reportService;
+    }
+
+    @Override
+    public void editTask(Task task, EditTaskBindingModel bindingModel) {
+        this.modelMerger.merge(bindingModel, task);
+        if (bindingModel.getParentTask() != null && !bindingModel.getParentTask().getProject().getId().equals(task.getProject().getId())) {
+            throw new RuntimeException("This parent task does not belong to thing project!");
+        }
+
+        this.repository.merge(task);
     }
 
     @Override

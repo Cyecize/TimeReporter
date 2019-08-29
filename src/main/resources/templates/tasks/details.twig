@@ -3,9 +3,13 @@
 {% block body %}
     {% set task = viewModel.task %}
     {% set subtasks = viewModel.subTasks %}
+    {% set project = viewModel.taskProject %}
     <div class="mr-auto mt-2 pt-3">
         <div>
             <h3>Details</h3>
+            {% if project.owner.id == user.id %}
+                <a href="{{ path("/tasks/edit/" ~ task.id) }}" class="btn btn-sm btn-info pt-0 pb-0">Edit</a>
+            {% endif %}
             <hr>
             <div class="row">
                 <div class="col-md-6">

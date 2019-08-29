@@ -1,6 +1,7 @@
 package com.cyecize.reporter.app.controllers;
 
 import com.cyecize.reporter.app.bindingModels.CreateTaskBindingModel;
+import com.cyecize.reporter.app.bindingModels.EditTaskBindingModel;
 import com.cyecize.reporter.app.dataAdapters.IdToProjectAdapter;
 import com.cyecize.reporter.app.dataAdapters.IdToTaskAdapter;
 import com.cyecize.reporter.app.entities.Project;
@@ -15,7 +16,7 @@ import com.cyecize.reporter.users.RoleConstants;
 import com.cyecize.reporter.users.entities.User;
 import com.cyecize.reporter.users.services.UserService;
 import com.cyecize.summer.areas.security.annotations.PreAuthorize;
-import com.cyecize.summer.areas.security.enums.AuthorizationType;
+import com.cyecize.summer.areas.security.interfaces.UserDetails;
 import com.cyecize.summer.areas.security.models.Principal;
 import com.cyecize.summer.areas.validation.annotations.ConvertedBy;
 import com.cyecize.summer.areas.validation.annotations.Valid;
@@ -27,6 +28,7 @@ import com.cyecize.summer.common.annotations.routing.PathVariable;
 import com.cyecize.summer.common.annotations.routing.PostMapping;
 import com.cyecize.summer.common.annotations.routing.RequestMapping;
 import com.cyecize.summer.common.models.JsonResponse;
+import com.cyecize.summer.common.models.Model;
 import com.cyecize.summer.common.models.ModelAndView;
 import com.cyecize.summer.common.models.RedirectAttributes;
 import org.modelmapper.ModelMapper;
@@ -74,7 +76,7 @@ public class TaskController extends BaseController {
             return super.redirect("create");
         }
 
-        if (!principal.getUser().getUsername().equals(bindingModel.getProject().getOwner().getUsername())) {
+        if (!this.isUserProjectOwner(principal.getUser(), bindingModel.getProject())) {
             return super.redirect("/");
         }
 
@@ -124,8 +126,40 @@ public class TaskController extends BaseController {
                             taskViewModelAdvanced.setTotalReportedTime(this.taskService.findTotalReportedTimeForTaskRecursive(t));
 
                             return taskViewModelAdvanced;
-                        }).collect(Collectors.toList())
-                )
+                        }).collect(Collectors.toList()),
+                        task.getProject())
         );
+    }
+
+    @GetMapping("/edit/{id}")
+    public ModelAndView editTaskGetAction(@ConvertedBy(IdToTaskAdapter.class) @PathVariable("id") Task task, Principal principal, Model model) {
+        if (!this.isUserProjectOwner(principal.getUser(), task.getProject())) {
+            return super.redirect("/");
+        }
+
+        model.addAttribute("model", task);
+        model.addAttribute("allProjectTasks", this.taskService.findAllByProject(task.getProject()));
+
+        return super.view("tasks/edit.twig");
+    }
+
+    @PostMapping("/edit/{id}")
+    public ModelAndView editTaskPostAction(@ConvertedBy(IdToTaskAdapter.class) @PathVariable("id") Task task, Principal principal,
+                                           @Valid EditTaskBindingModel bindingModel, BindingResult bindingResult) {
+        if (!this.isUserProjectOwner(principal.getUser(), task.getProject())) {
+            return super.redirect("/");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return super.redirect(String.format("edit/%d", task.getId()));
+        }
+
+        this.taskService.editTask(task, bindingModel);
+
+        return super.redirect(String.format("details/%d", task.getId()));
+    }
+
+    private boolean isUserProjectOwner(UserDetails user, Project project) {
+        return user.getUsername().equals(project.getOwner().getUsername());
     }
 }
