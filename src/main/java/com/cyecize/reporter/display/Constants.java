@@ -11,7 +11,7 @@ public class Constants {
     public static final URL FAVICON_RESOURCE_LOCATION = StartUp.class.getResource("../../../appicon.png");
 
     //Window Sizes
-    public static final int WINDOW_MIN_WIDTH = 1000;
+    public static final int WINDOW_MIN_WIDTH = 1100;
 
     public static final int WINDOW_MIN_HEIGHT = 600;
 }
