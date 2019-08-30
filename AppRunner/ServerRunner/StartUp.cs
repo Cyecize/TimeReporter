@@ -73,7 +73,7 @@ namespace ServerRunner
             HttpListenerRequest request = context.Request;
 
             HttpListenerResponse response = context.Response;
-            response.Redirect($"http://localhost:{appPort}/database/connect?loadSavedCredentials=yes");
+            response.Redirect($"http://localhost:{appPort}/database/connect?loadStoredCredentials");
 
             System.IO.Stream output = response.OutputStream;
             output.WriteByte(0);
