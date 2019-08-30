@@ -5,6 +5,15 @@ using System.Timers;
 
 namespace ServerRunner
 {
+    /**
+     * This app does the following things:
+     *      Finds 2 available ports
+     *      Executes a cmd command to run the Javache server.
+     *      Creates a listener on one of the ports and waits for javache to connect.
+     *          When javache connects, this app will close out.
+     *          If javache does not connect, this app will close due to timeout.
+     *      Prints the output of the Javache server on the console.
+     */
     class StartUp
     {
         static void Main(string[] args)
@@ -26,7 +35,7 @@ namespace ServerRunner
             int appPort = FreePortFinder.FindFreePort(initialPort);
             int appLoadedListenerPort = FreePortFinder.FindFreePort(initialAppLoadedListenerPort);
 
-            process.StandardInput.WriteLine(@"jre\bin\java.exe -cp "".;./bin/javache-api-1.2.6.jar;"" com.cyecize.StartUp " + appPort + " " + appLoadedListenerPort);
+            process.StandardInput.WriteLine(@"jre\bin\java.exe -cp "".;./bin/javache-api-1.2.7.jar;"" com.cyecize.StartUp " + appPort + " " + appLoadedListenerPort);
 
             process.StandardInput.Flush();
             process.StandardInput.Close();
@@ -35,30 +44,28 @@ namespace ServerRunner
             process.BeginOutputReadLine();
 
             InitAppTimeout();
-            InitAppLoadedListener(new string[] { $"http://localhost:{appLoadedListenerPort}/" });
+            InitAppLoadedListener(appPort, appLoadedListenerPort);
         }
 
         private static void InitAppTimeout()
         {
             Timer timer = new Timer();
-            timer.Interval = 10000;
+            timer.Interval = 15000;
             timer.Elapsed += (sender, eventArgs) =>
             {
                 Console.WriteLine("App did not start properly!");
+                Console.ReadKey();
                 Environment.Exit(1);
             };
 
             timer.Start();
         }
 
-        private static void InitAppLoadedListener(string[] prefixes)
+        private static void InitAppLoadedListener(int appPort, int callbackPort)
         {
             HttpListener listener = new HttpListener();
 
-            foreach (string s in prefixes)
-            {
-                listener.Prefixes.Add(s);
-            }
+            listener.Prefixes.Add($"http://localhost:{callbackPort}/database/connect/");
 
             listener.Start();
 
@@ -66,7 +73,7 @@ namespace ServerRunner
             HttpListenerRequest request = context.Request;
 
             HttpListenerResponse response = context.Response;
-            response.Redirect("https://www.google.com");
+            response.Redirect($"http://localhost:{appPort}/database/connect?loadSavedCredentials=yes");
 
             System.IO.Stream output = response.OutputStream;
             output.WriteByte(0);

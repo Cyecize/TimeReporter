@@ -2,7 +2,7 @@ package com.cyecize.reporter.display.services;
 
 public interface DisplayService {
 
-    void initialize();
+    void initialize(int port);
 
     void loadUserPreferences();
 

@@ -28,8 +28,8 @@ public class DisplayServiceImpl implements DisplayService {
     }
 
     @Override
-    public void initialize() {
-        this.runEmbeddedBrowser(DbConnectionConstants.DB_CONNECT_ROUTE, 8000); //TODO make port configurable
+    public void initialize(int port) {
+        this.runEmbeddedBrowser(DbConnectionConstants.DB_CONNECT_ROUTE, port);
     }
 
     @Override

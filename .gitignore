@@ -8,3 +8,4 @@ classes/
 src/main/resources/package-lock.json
 /AppRunner/ServerRunner/bin/**
 /AppRunner/ServerRunner/obj/**
+AppRunner/.vs/
