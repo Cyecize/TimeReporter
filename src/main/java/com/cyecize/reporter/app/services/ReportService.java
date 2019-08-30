@@ -7,6 +7,7 @@ import com.cyecize.reporter.app.entities.Task;
 import com.cyecize.reporter.common.utils.Pair;
 import com.cyecize.reporter.users.entities.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReportService {
@@ -23,6 +24,9 @@ public interface ReportService {
 
     List<Report> findByReporter(User reporter);
 
+    List<Report> findByReporter(User reporter, LocalDateTime startDate, LocalDateTime endDate);
+
+    //TODO: make use of this methods in task details.
     List<Report> findByReporter(User reporter, Task task);
 
     List<Report> findByReporterAndProject(User reporter, Project project);

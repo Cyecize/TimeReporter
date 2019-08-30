@@ -72,6 +72,10 @@ public class TwigUtils {
         return String.format("%d hours and %d minutes", hourMinutePair.getKey(), hourMinutePair.getValue());
     }
 
+    public String formatReportedTimeFromMinutes(int minutes) {
+        return this.formatReportedTime(new Pair<>(minutes / 60L, minutes % 60L));
+    }
+
     public String sortReportedTime(Pair<Long, Long> hourMinutePair) {
         return String.valueOf(hourMinutePair.getKey() * 60 + hourMinutePair.getValue());
     }

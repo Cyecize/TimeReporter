@@ -75,6 +75,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    public List<Report> findByReporter(User reporter, LocalDateTime startDate, LocalDateTime endDate) {
+        return this.repository.findByReporter(reporter, startDate, endDate);
+    }
+
+    @Override
     public List<Report> findByReporterAndProject(User reporter, Project project) {
         return this.repository.findByReporterAndProject(reporter, project);
     }

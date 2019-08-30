@@ -20,7 +20,8 @@ $(function () {
         DatePickerPresets.dateTimePicker(picker, false);
         picker.setMinDate(minDate);
 
-        picker.initialize();
+        const dpInstance = picker.initialize().data('datepicker');
+        dpInstance.selectDate(new Date());
     };
 
     const requestItems = (url, callback) => {

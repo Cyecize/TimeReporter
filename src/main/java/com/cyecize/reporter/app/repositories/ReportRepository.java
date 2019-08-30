@@ -8,6 +8,7 @@ import com.cyecize.reporter.users.entities.User;
 import com.cyecize.summer.common.annotations.Service;
 
 import javax.persistence.criteria.Join;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -15,6 +16,7 @@ public class ReportRepository extends BaseRepository<Report, Long> {
 
     private static final String REPORTER_FIELD = "reporter";
     private static final String TASK_FIELD = "task";
+    private static final String DATE_OF_REPORT_FIELD = "dateOfReport";
 
     public Long findTotalReportedMinutesForProject(Project project) {
         return super.execute(reportActionResult -> reportActionResult.set(
@@ -72,5 +74,13 @@ public class ReportRepository extends BaseRepository<Report, Long> {
                     super.criteriaBuilder.equal(taskJoin.get("project"), project)
             );
         });
+    }
+
+    public List<Report> findByReporter(User reporter, LocalDateTime startDate, LocalDateTime endDate) {
+        return super.queryBuilderList((qb, reportRoot) -> qb.where(
+                super.criteriaBuilder.equal(reportRoot.get(REPORTER_FIELD), reporter),
+                super.criteriaBuilder.greaterThan(reportRoot.get(DATE_OF_REPORT_FIELD), startDate),
+                super.criteriaBuilder.lessThan(reportRoot.get(DATE_OF_REPORT_FIELD), endDate)
+        ));
     }
 }
