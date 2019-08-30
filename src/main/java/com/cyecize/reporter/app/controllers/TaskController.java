@@ -83,6 +83,7 @@ public class TaskController extends BaseController {
     }
 
     @GetMapping("/project/{projId}")
+    @PreAuthorize(LOGGED_IN)
     public JsonResponse getTasksForProjectAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("projId") Project project) {
         return new JsonResponse().addAttribute(
                 "items",

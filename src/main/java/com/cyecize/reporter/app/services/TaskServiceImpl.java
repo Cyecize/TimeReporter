@@ -63,17 +63,20 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Pair<Long, Long> findTotalReportedTimeForTaskRecursive(Task task) {
-        Long minutes = this.findTotalReportedMinutesForTaskRecursive(task, 0L);
+        Long minutes = this.findTotalReportedMinutesForTaskRecursive(task);
         return new Pair<>(minutes / 60, minutes % 60);
     }
 
-    private Long findTotalReportedMinutesForTaskRecursive(Task task, Long minutes) {
+    private Long findTotalReportedMinutesForTaskRecursive(Task task) {
         Pair<Long, Long> totalReportedTimeForTask = this.findTotalReportedTimeForTask(task);
+
+        Long minutes = 0L;
+
         minutes += totalReportedTimeForTask.getValue();
         minutes += totalReportedTimeForTask.getKey() * 60;
 
         for (Task subTask : task.getSubTasks()) {
-            this.findTotalReportedMinutesForTaskRecursive(subTask, minutes);
+            minutes += this.findTotalReportedMinutesForTaskRecursive(subTask);
         }
 
         return minutes;

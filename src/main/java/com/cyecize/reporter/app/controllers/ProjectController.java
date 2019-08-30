@@ -10,6 +10,7 @@ import com.cyecize.reporter.app.services.ReportService;
 import com.cyecize.reporter.app.services.TaskService;
 import com.cyecize.reporter.app.viewModels.*;
 import com.cyecize.reporter.common.controllers.BaseController;
+import com.cyecize.reporter.conn.annotations.DisableJpaCache;
 import com.cyecize.reporter.users.RoleConstants;
 import com.cyecize.reporter.users.dataAdapters.IdToUserAdapter;
 import com.cyecize.reporter.users.dataAdapters.UsernameToUserAdapter;
@@ -147,6 +148,7 @@ public class ProjectController extends BaseController {
     }
 
     @PostMapping("/{projectId}/add/{username}")
+    @DisableJpaCache
     public JsonResponse addParticipantAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("projectId") Project project, Principal principal,
                                              @ConvertedBy(UsernameToUserAdapter.class) @PathVariable(value = "username", required = false) User participant) {
         if (!this.isUserOwner(principal.getUser(), project)) {
@@ -163,6 +165,7 @@ public class ProjectController extends BaseController {
     }
 
     @PostMapping("/{projectId}/remove/{username}")
+    @DisableJpaCache
     public JsonResponse removeParticipantAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("projectId") Project project, Principal principal,
                                                 @ConvertedBy(UsernameToUserAdapter.class) @PathVariable(value = "username", required = false) User participant) {
         if (!this.isUserOwner(principal.getUser(), project)) {
