@@ -92,7 +92,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> findAll() {
-        return this.repository.findAll();
+    public List<Project> findAll(boolean skipCompleted) {
+        return this.repository.findAll(skipCompleted);
     }
 }

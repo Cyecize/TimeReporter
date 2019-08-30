@@ -7,6 +7,10 @@
                 <h3>{{ viewModel.viewTitle }}
                     <small>( {{ viewModel.projects.size }} )</small>
                 </h3>
+                <label><input type="checkbox"
+                              id="showOnlyInProgress" {% if request.queryParameters.get("skipCompleted") %} checked {% endif %}>
+                    Show only in progress
+                </label>
             </div>
             <div class="col-md-6 text-right">
                 <div id="searchBarContainer"></div>
@@ -32,6 +36,10 @@
 
             SearchPresets.project(table, container);
 
+            $('#showOnlyInProgress').on('change', function () {
+                const skipCompleted = this.checked;
+                location.href = location.href.replace(location.search, '') + `?skipCompleted=${skipCompleted}`;
+            });
         });
     </script>
 {% endblock %}

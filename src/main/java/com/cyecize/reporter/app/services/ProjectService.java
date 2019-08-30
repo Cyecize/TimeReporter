@@ -23,7 +23,7 @@ public interface ProjectService {
 
     List<Project> findInvolved(User involvedUser, boolean skipCompleted);
 
-    List<Project> findAll();
+    List<Project> findAll(boolean skipCompleted);
 
     //List<Project> findAll(boolean skipCompleted);
 }

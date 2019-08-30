@@ -27,7 +27,8 @@ public class ProjectRepository extends BaseRepository<Project, Long> {
     public List<Project> findByParticipant(User involvedUser, boolean skipCompleted) {
         return super.queryBuilderList((qb, projectRoot) -> {
                     final ListJoin<Project, User> collabs = projectRoot.joinList(PARTICIPANTS_FIELD_NAME);
-           
+
+                    qb.distinct(true);
                     qb.where(new NotNullPredicateList(
                             this.setSkipCompletedFlag(projectRoot, skipCompleted),
                             super.criteriaBuilder.equal(collabs.get("id"), involvedUser.getId())
@@ -36,11 +37,17 @@ public class ProjectRepository extends BaseRepository<Project, Long> {
         );
     }
 
+    public List<Project> findAll(boolean skipCompleted) {
+        return super.queryBuilderList((qb, projectRoot) -> qb.where(new NotNullPredicateList(
+                this.setSkipCompletedFlag(projectRoot, skipCompleted)
+        ).toArray()));
+    }
+
     private Predicate setSkipCompletedFlag(Path path, boolean skipDisabled) {
         if (!skipDisabled) {
             return null;
         }
 
-        return super.criteriaBuilder.equal(path.get(COMPLETED_FIELD_NAME), true);
+        return super.criteriaBuilder.equal(path.get(COMPLETED_FIELD_NAME), false);
     }
 }

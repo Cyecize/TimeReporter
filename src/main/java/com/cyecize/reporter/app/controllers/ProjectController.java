@@ -23,10 +23,7 @@ import com.cyecize.summer.areas.validation.annotations.Valid;
 import com.cyecize.summer.areas.validation.interfaces.BindingResult;
 import com.cyecize.summer.common.annotations.Autowired;
 import com.cyecize.summer.common.annotations.Controller;
-import com.cyecize.summer.common.annotations.routing.GetMapping;
-import com.cyecize.summer.common.annotations.routing.PathVariable;
-import com.cyecize.summer.common.annotations.routing.PostMapping;
-import com.cyecize.summer.common.annotations.routing.RequestMapping;
+import com.cyecize.summer.common.annotations.routing.*;
 import com.cyecize.summer.common.models.JsonResponse;
 import com.cyecize.summer.common.models.Model;
 import com.cyecize.summer.common.models.ModelAndView;
@@ -63,24 +60,23 @@ public class ProjectController extends BaseController {
 
     @GetMapping("/my")
     @PreAuthorize(LOGGED_IN)
-    public ModelAndView myProjectsAction(Principal principal) {
+    public ModelAndView myProjectsAction(Principal principal, @RequestParam("skipCompleted") boolean skipCompleted) {
         return super.view(
                 "projects/list.twig",
                 new ListProjectsViewModel(
                         "My Projects",
-                        //TODO skip completed AUTO
-                        this.projectService.findInvolved(this.userService.findOneByUsername(principal.getUser().getUsername()), false)
+                        this.projectService.findInvolved(this.userService.findOneByUsername(principal.getUser().getUsername()), skipCompleted)
                 )
         );
     }
 
     @GetMapping("/all")
-    public ModelAndView allProjectsAction() {
+    public ModelAndView allProjectsAction(@RequestParam("skipCompleted") boolean skipCompleted) {
         return super.view(
                 "projects/list.twig",
                 new ListProjectsAdvancedViewModel(
                         "All Projects",
-                        this.projectService.findAll().stream()
+                        this.projectService.findAll(skipCompleted).stream()
                                 .map(project -> new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedTime(project)))
                                 .collect(Collectors.toList())
                 )
@@ -187,8 +183,7 @@ public class ProjectController extends BaseController {
     public JsonResponse findInvolvedProjectsForUserAction(@ConvertedBy(IdToUserAdapter.class) @PathVariable("userId") User user) {
         return new JsonResponse().addAttribute(
                 "items",
-                //TODO skip completed AUTO
-                this.projectService.findInvolved(user, false).stream()
+                this.projectService.findInvolved(user, true).stream()
                         .map(p -> this.modelMapper.map(p, ProjectViewModel.class))
                         .collect(Collectors.toList())
         );
