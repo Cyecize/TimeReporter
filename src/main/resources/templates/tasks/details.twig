@@ -20,6 +20,14 @@
                         <dd class="col-md-8">{{ utils.formatDate(task.startDate) }}</dd>
                         <dt class="col-md-4">Completed:</dt>
                         <dd class="col-md-8">{% if task.completed %}Yes{% else %}No{% endif %}</dd>
+                        {% if task.parentTask %}
+                            <dt class="col-md-4">Parent Task:</dt>
+                            <dd class="col-md-8">
+                                <a href="{{ path("/tasks/details/" ~ task.parentTask.id) }}">
+                                    {{ task.parentTask.taskName }}
+                                </a>
+                            </dd>
+                        {% endif %}
                     </dl>
                 </div>
                 <div class="col-md-6">
@@ -33,9 +41,9 @@
                             <dd class="col-md-8">{{ utils.formatDate(task.endDate) }}</dd>
                         {% endif %}
                         <dt class="col-md-4">Number of Tasks:</dt>
-                        <dd class="col-md-8">{{ viewModel.mainTasks.size }}</dd>
+                        <dd class="col-md-8">{{ subtasks.size }}</dd>
                         <dt class="col-md-4">Total Reported Hours:</dt>
-                        <dd class="col-md-8">{{ utils.formatReportedTime(task.totalReportedTime) }}</dd>
+                        <dd class="col-md-8">{{ utils.formatReportedTime(viewModel.totalReportedTime) }}</dd>
                     </dl>
                 </div>
             </div>

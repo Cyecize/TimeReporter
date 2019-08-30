@@ -111,13 +111,11 @@ public class TaskController extends BaseController {
     @PreAuthorize(LOGGED_IN)
     public ModelAndView taskDetailsAction(@ConvertedBy(IdToTaskAdapter.class) @PathVariable("taskId") Task task) {
 
-        final TaskViewModelAdvanced taskDetails = this.modelMapper.map(task, TaskViewModelAdvanced.class);
-        taskDetails.setTotalReportedTime(this.taskService.findTotalReportedTimeForTaskRecursive(task));
-
         return super.view(
                 "tasks/details.twig",
                 new TaskDetailsViewModel(
-                        taskDetails,
+                        task,
+                        this.taskService.findTotalReportedTimeForTaskRecursive(task),
                         task.getSubTasks().stream().map(t -> {
                             final TaskViewModelAdvanced taskViewModelAdvanced = this.modelMapper.map(t, TaskViewModelAdvanced.class);
                             taskViewModelAdvanced.setTotalReportedTime(this.taskService.findTotalReportedTimeForTaskRecursive(t));
