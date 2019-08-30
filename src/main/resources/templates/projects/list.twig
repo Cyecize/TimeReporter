@@ -35,11 +35,6 @@
             const container = document.getElementById('searchBarContainer');
 
             SearchPresets.project(table, container);
-
-            $('#showOnlyInProgress').on('change', function () {
-                const skipCompleted = this.checked;
-                location.href = location.href.replace(location.search, '') + `?skipCompleted=${skipCompleted}`;
-            });
         });
     </script>
 {% endblock %}

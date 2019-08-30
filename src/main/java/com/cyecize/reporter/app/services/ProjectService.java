@@ -19,7 +19,7 @@ public interface ProjectService {
 
     Project createProject(CreateProjectBindingModel bindingModel, User owner);
 
-    List<Project> findByOwner(User owner);
+    List<Project> findByOwner(User owner, boolean skipCompleted);
 
     List<Project> findInvolved(User involvedUser, boolean skipCompleted);
 

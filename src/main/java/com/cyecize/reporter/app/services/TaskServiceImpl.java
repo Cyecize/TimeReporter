@@ -94,21 +94,26 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findMainTasks(Project project) {
-        return this.repository.findByNullParentAndProject(project);
+    public List<Task> findMainTasks(Project project, boolean skipCompleted) {
+        return this.repository.findByNullParentAndProject(project, skipCompleted);
     }
 
     @Override
-    public List<Task> findAllByProject(Project project) {
-        return this.repository.findByProject(project);
+    public List<Task> findAllByProject(Project project, boolean skipCompleted) {
+        return this.repository.findByProject(project, skipCompleted);
     }
 
     @Override
-    public List<Task> findAllTasksForUser(User user) {
+    public List<Task> findAllTasksForUser(User user, boolean skipCompleted) {
         final Map<Long, Task> tasks = new HashMap<>();
 
         for (Report report : this.reportService.findByReporter(user)) {
             final Task task = report.getTask();
+
+            if (skipCompleted && task.getCompleted()) {
+                continue;
+            }
+
             if (!tasks.containsKey(task.getId())) {
                 tasks.put(task.getId(), task);
             }

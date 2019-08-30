@@ -7,6 +7,10 @@
                 <h3>My Tasks
                     <small>( {{ tasks.size }} )</small>
                 </h3>
+                <label><input type="checkbox"
+                              id="showOnlyInProgress" {% if request.queryParameters.get("skipCompleted") %} checked {% endif %}>
+                    Show only in progress
+                </label>
             </div>
             <div class="col-md-6 text-right">
                 <div id="searchBarContainer"></div>

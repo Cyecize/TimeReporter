@@ -77,7 +77,7 @@ public class ProjectController extends BaseController {
                 new ListProjectsAdvancedViewModel(
                         "All Projects",
                         this.projectService.findAll(skipCompleted).stream()
-                                .map(project -> new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedTime(project)))
+                                .map(project -> new DetailedProjectNode(project, this.taskService.findMainTasks(project, false), this.reportService.findTotalReportedTime(project)))
                                 .collect(Collectors.toList())
                 )
         );
@@ -117,7 +117,7 @@ public class ProjectController extends BaseController {
         return super.view(
                 "projects/details.twig",
                 "viewModel",
-                new DetailedProjectNode(project, this.taskService.findMainTasks(project), this.reportService.findTotalReportedTime(project))
+                new DetailedProjectNode(project, this.taskService.findMainTasks(project, false), this.reportService.findTotalReportedTime(project))
         );
     }
 

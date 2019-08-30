@@ -82,8 +82,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> findByOwner(User owner) {
-        return this.repository.findByOwner(owner);
+    public List<Project> findByOwner(User owner, boolean skipCompleted) {
+        return this.repository.findByOwner(owner, skipCompleted);
     }
 
     @Override

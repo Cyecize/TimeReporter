@@ -18,10 +18,11 @@ public class ProjectRepository extends BaseRepository<Project, Long> {
 
     private static final String PARTICIPANTS_FIELD_NAME = "participants";
 
-    public List<Project> findByOwner(User owner) {
-        return super.queryBuilderList((qb, projectRoot) -> qb.where(
-                super.criteriaBuilder.equal(projectRoot.get(OWNER_FIELD_NAME), owner)
-        ));
+    public List<Project> findByOwner(User owner, boolean skipCompleted) {
+        return super.queryBuilderList((qb, projectRoot) -> qb.where(new NotNullPredicateList(
+                super.criteriaBuilder.equal(projectRoot.get(OWNER_FIELD_NAME), owner),
+                this.setSkipCompletedFlag(projectRoot, skipCompleted)
+        ).toArray()));
     }
 
     public List<Project> findByParticipant(User involvedUser, boolean skipCompleted) {

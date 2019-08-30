@@ -23,10 +23,7 @@ import com.cyecize.summer.areas.validation.annotations.Valid;
 import com.cyecize.summer.areas.validation.interfaces.BindingResult;
 import com.cyecize.summer.common.annotations.Autowired;
 import com.cyecize.summer.common.annotations.Controller;
-import com.cyecize.summer.common.annotations.routing.GetMapping;
-import com.cyecize.summer.common.annotations.routing.PathVariable;
-import com.cyecize.summer.common.annotations.routing.PostMapping;
-import com.cyecize.summer.common.annotations.routing.RequestMapping;
+import com.cyecize.summer.common.annotations.routing.*;
 import com.cyecize.summer.common.models.JsonResponse;
 import com.cyecize.summer.common.models.Model;
 import com.cyecize.summer.common.models.ModelAndView;
@@ -63,7 +60,7 @@ public class TaskController extends BaseController {
         return super.view(
                 "tasks/create.twig",
                 "projects",
-                this.projectService.findByOwner(this.userService.findOneByUsername(principal.getUser().getUsername()))
+                this.projectService.findByOwner(this.userService.findOneByUsername(principal.getUser().getUsername()), true)
         );
     }
 
@@ -89,7 +86,7 @@ public class TaskController extends BaseController {
     public JsonResponse getTasksForProjectAction(@ConvertedBy(IdToProjectAdapter.class) @PathVariable("projId") Project project) {
         return new JsonResponse().addAttribute(
                 "items",
-                this.taskService.findAllByProject(project).stream()
+                this.taskService.findAllByProject(project, true).stream()
                         .map(task -> this.modelMapper.map(task, TaskViewModel.class))
                         .collect(Collectors.toList())
         );
@@ -97,10 +94,9 @@ public class TaskController extends BaseController {
 
     @GetMapping("/my")
     @PreAuthorize(LOGGED_IN)
-    public ModelAndView myTasksAction(Principal principal) {
+    public ModelAndView myTasksAction(Principal principal, @RequestParam("skipCompleted") boolean skipCompleted) {
         final User loggedInUser = this.userService.findOneByUsername(principal.getUser().getUsername());
-
-        return super.view("tasks/my-tasks.twig", "tasks", this.taskService.findAllTasksForUser(loggedInUser).stream()
+        return super.view("tasks/my-tasks.twig", "tasks", this.taskService.findAllTasksForUser(loggedInUser, skipCompleted).stream()
                 .map(t -> {
                     final TaskViewModelAdvanced viewModel = this.modelMapper.map(t, TaskViewModelAdvanced.class);
                     viewModel.setTotalReportedTime(this.taskService.findTotalReportedTimeForTask(t, loggedInUser));
@@ -138,7 +134,7 @@ public class TaskController extends BaseController {
         }
 
         model.addAttribute("model", task);
-        model.addAttribute("allProjectTasks", this.taskService.findAllByProject(task.getProject()));
+        model.addAttribute("allProjectTasks", this.taskService.findAllByProject(task.getProject(), false));
 
         return super.view("tasks/edit.twig");
     }

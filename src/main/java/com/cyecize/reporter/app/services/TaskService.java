@@ -23,9 +23,9 @@ public interface TaskService {
 
     Task findById(Long id);
 
-    List<Task> findMainTasks(Project project);
+    List<Task> findMainTasks(Project project, boolean skipCompleted);
 
-    List<Task> findAllByProject(Project project);
+    List<Task> findAllByProject(Project project, boolean skipCompleted);
 
-    List<Task> findAllTasksForUser(User user);
+    List<Task> findAllTasksForUser(User user, boolean skipCompleted);
 }
