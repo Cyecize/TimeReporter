@@ -11,6 +11,7 @@ import com.cyecize.summer.common.annotations.Autowired;
 import com.cyecize.summer.common.annotations.Service;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +39,22 @@ public class ReportServiceImpl implements ReportService {
         }
 
         this.repository.persist(report);
+    }
+
+    @Override
+    public boolean removeReport(Report report) {
+        final LocalDateTime today = LocalDate.now().atStartOfDay();
+        if (report.getDateOfReport().isBefore(today)) {
+            return false;
+        }
+
+        this.repository.remove(report);
+        return true;
+    }
+
+    @Override
+    public Report findById(Long id) {
+        return this.repository.find(id);
     }
 
     @Override

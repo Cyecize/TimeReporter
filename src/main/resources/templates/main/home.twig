@@ -2,13 +2,51 @@
 
 {% block body %}
     <div class="mt-2">
-        <h3>Report Time</h3>
-        <hr>
-        {% embed '../partials/report.twig' %} {% endembed %}
+        <div descr="Report Time">
+            <h3>Report Time</h3>
+            <hr>
+            {% embed '../partials/report.twig' %} {% endembed %}
+        </div>
+
+        <div descr="Today's reports">
+            <h3>My reports for today</h3>
+            <small>Total reported time: {{ utils.formatReportedTime(viewModel.totalReportedTimeForToday) }}.</small>
+            <hr>
+            {% if viewModel.reportsFromToday.size > 0 %}
+                {% embed '../tables/reports.twig' with {'reports': viewModel.reportsFromToday, 'showActions': true} %} {% endembed %}
+            {% else %}
+                <p class="alert alert-warning text-warning">No reports for today.</p>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script src="/static/js/date-picker.js"></script>
     <script src="/static/js/report-helper.js"></script>
+    <script src="/static/js/data-tables.js"></script>
+    <script src="/static/js/data-table-linking.js"></script>
+
+    <script>
+        $(function () {
+            $('#listReportsTable').on('click', '.remove-report-btn', function (e) {
+                const reportId = $(this).parent().parent().data('report-id');
+                $.ajax({
+                    url: `/reports/remove/${reportId}`,
+                    success: function (res) {
+                        alert(res.response.message);
+                        location.reload();
+                    },
+                    error: function (err) {
+                        alert(err.response.message);
+                        console.error(err);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/static/css/data-tables.css">
 {% endblock %}

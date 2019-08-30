@@ -1,0 +1,52 @@
+<table class="table-style resizable-table hoverable-table sortable-table w-100" id="listReportsTable">
+    <thead>
+    <tr class="table-style-row">
+        <th class="col-sortable col-id">
+            Id
+        </th>
+        <th class="col-sortable">
+            Project
+        </th>
+        <th class="col-sortable">
+            Task
+        </th>
+        <th class="col-sortable">
+            Reported Time
+        </th>
+        <th class="col-sortable">
+            Date
+        </th>
+        <th>
+            Comment
+        </th>
+        {% if showActions %}
+            <th>
+                Actions
+            </th>
+        {% endif %}
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for report in reports %}
+        {% set task = report.task %}
+        {% set project = task.project %}
+
+        <tr data-project-id="{{ project.id }}" data-task-id="{{ task.id }}" data-report-id="{{ report.id }}"
+            class="table-style-row">
+
+            <td>{{ report.id }}</td>
+            <td class="col-link col-project-link">{{ project.projectName }}</td>
+            <td class="col-link col-task-link">{{ task.taskName }}</td>
+            <td data-sort="{{ report.reportedMinutes }}">{{ utils.formatReportedTimeFromMinutes(report.reportedMinutes) }}</td>
+            <td data-sort="{{ utils.millisFromDate(report.dateOfReport) }}">{{ utils.formatDateTime(report.dateOfReport) }}</td>
+            <td>{{ report.comment }}</td>
+            {% if showActions %}
+                <td>
+                    <button class="remove-report-btn">Remove</button>
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

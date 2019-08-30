@@ -14,6 +14,10 @@ public interface ReportService {
 
     void report(ReportBindingModel bindingModel, User loggedInUser);
 
+    boolean removeReport(Report report);
+
+    Report findById(Long id);
+
     Pair<Long, Long> findTotalReportedTime(Project project);
 
     Pair<Long, Long> findTotalReportedTimeForReporter(Project project, User reporter);
