@@ -19,6 +19,10 @@ public class LocalDateTimeAdapter implements DataAdapter<LocalDateTime> {
 
         try {
             String rawDate = httpSoletRequest.getBodyParameters().get(paramName);
+            if (rawDate == null) {
+                rawDate = httpSoletRequest.getQueryParameters().get(paramName);
+            }
+
             return LocalDateTime.parse(rawDate, formatter);
         } catch (Exception ignored) {
 

@@ -82,6 +82,16 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    public Pair<Long, Long> calculateTotalReportedTime(List<Report> reports) {
+        long minutes = 0;
+        for (Report report : reports) {
+            minutes += report.getReportedMinutes();
+        }
+
+        return new Pair<>(minutes / 60, minutes % 60);
+    }
+
+    @Override
     public List<Report> findByReporter(User reporter) {
         return this.repository.findByReporter(reporter);
     }

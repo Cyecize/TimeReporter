@@ -56,6 +56,10 @@ public class TwigUtils {
         return date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 
+    public String formatDateTimeForJs(LocalDateTime date) {
+        return date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    }
+
     public String formatDateTime(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }

@@ -42,13 +42,7 @@ public class HomeController extends BaseController {
 
         return super.view(
                 "main/home.twig",
-                new HomeViewModel(
-                        reportsFromToday,
-                        reportsFromToday.stream()
-                                .map(r -> new Pair<>(r.getReportedMinutes() / 60L, r.getReportedMinutes() % 60L))
-                                .reduce((pair, pair2) -> new Pair<>(pair.getKey() + pair2.getKey(), pair.getValue() + pair2.getValue()))
-                                .orElse(new Pair<>(0L, 0L))
-                )
+                new HomeViewModel(reportsFromToday, this.reportService.calculateTotalReportedTime(reportsFromToday))
         );
     }
 }
