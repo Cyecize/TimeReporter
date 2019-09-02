@@ -35,7 +35,7 @@ Back end - 	[Custom Web Framework](https://github.com/Cyecize/java-web-server)
 
 Desktop frame
 
-	*jCEF - Java Chromium Embedded Framework	
+	* jCEF - Java Chromium Embedded Framework	
 	
 Want to run the app?
 ---------------------
@@ -57,5 +57,5 @@ Steps:
 
 Questions
 ------------
-If you have questions, feel free to contact me via email or on facebook.
-[ceci2205@abv.bg](mailto:ceci2205@abv.bg)
+If you have questions, feel free to contact me at [ceci2205@abv.bg](mailto:ceci2205@abv.bg) or on [facebook](https://www.facebook.com/ceci2205).
+
