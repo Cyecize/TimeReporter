@@ -6,6 +6,7 @@ import com.cyecize.summer.common.annotations.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * Converts MM/dd/yyyy hh:mm AM/PM to LocalDateTime.
@@ -15,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 public class LocalDateTimeAdapter implements DataAdapter<LocalDateTime> {
     @Override
     public LocalDateTime resolve(String paramName, HttpSoletRequest httpSoletRequest) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a", Locale.US);
 
         try {
             String rawDate = httpSoletRequest.getBodyParameters().get(paramName);
