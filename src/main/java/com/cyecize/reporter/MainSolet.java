@@ -4,8 +4,7 @@ import com.cyecize.broccolina.BroccolinaConstants;
 import com.cyecize.javache.ConfigConstants;
 import com.cyecize.javache.services.JavacheConfigService;
 import com.cyecize.reporter.conn.services.EntityMappingService;
-import com.cyecize.reporter.display.services.DisplayService;
-import com.cyecize.reporter.display.services.FileSystemConfigLoader;
+import com.cyecize.reporter.localConfig.services.FileSystemConfigLoader;
 import com.cyecize.summer.DispatcherSolet;
 import com.cyecize.summer.SummerBootApplication;
 import com.cyecize.summer.constants.IocConstants;
@@ -20,7 +19,6 @@ public class MainSolet extends DispatcherSolet {
     @Override
     protected void onApplicationLoaded() {
         super.dependencyContainer.getObject(FileSystemConfigLoader.class).initFiles(super.getSoletConfig().getAttribute(IocConstants.SOLET_CFG_ASSETS_DIR) + "");
-        super.dependencyContainer.getObject(DisplayService.class).loadUserPreferences();
         this.handleEmbeddedBrowser();
     }
 
@@ -31,7 +29,5 @@ public class MainSolet extends DispatcherSolet {
         if (!StartUp.isAppStartedFromEmbeddedServer) {
             serverPort = Integer.parseInt(javacheConfigService.getConfigParam(ConfigConstants.SERVER_STARTUP_ARGS, String[].class)[1]);
         }
-
-        super.dependencyContainer.getObject(DisplayService.class).initialize(serverPort);
     }
 }

@@ -14,7 +14,7 @@ import com.cyecize.reporter.conn.models.UserDbConnection;
 import com.cyecize.reporter.conn.services.DbConnectionStorageService;
 import com.cyecize.reporter.conn.services.EntityMappingService;
 import com.cyecize.reporter.conn.utils.SqlConnectionUtils;
-import com.cyecize.reporter.display.services.DesktopWindowConfigLoader;
+import com.cyecize.reporter.localConfig.services.DbCredentialsConfigLoader;
 import com.cyecize.solet.HttpSoletRequest;
 import com.cyecize.summer.areas.security.annotations.PreAuthorize;
 import com.cyecize.summer.areas.security.enums.AuthorizationType;
@@ -22,10 +22,10 @@ import com.cyecize.summer.areas.security.models.Principal;
 import com.cyecize.summer.areas.validation.annotations.Valid;
 import com.cyecize.summer.areas.validation.interfaces.BindingResult;
 import com.cyecize.summer.areas.validation.models.FieldError;
+import com.cyecize.summer.common.annotations.Autowired;
 import com.cyecize.summer.common.annotations.Controller;
 import com.cyecize.summer.common.annotations.routing.GetMapping;
 import com.cyecize.summer.common.annotations.routing.PostMapping;
-import com.cyecize.summer.common.models.JsonResponse;
 import com.cyecize.summer.common.models.Model;
 import com.cyecize.summer.common.models.ModelAndView;
 import com.cyecize.summer.common.models.RedirectAttributes;
@@ -53,16 +53,17 @@ public class DatabaseConnectionController extends BaseController {
 
     private final DbConnectionStorageService connectionStorageService;
 
-    private final DesktopWindowConfigLoader windowConfigLoader;
+    private final DbCredentialsConfigLoader configLoader;
 
     private final EntityMappingService entityMappingService;
 
     private final ModelMapper modelMapper;
 
-    public DatabaseConnectionController(DbConnectionStorageService connectionStorageService, DesktopWindowConfigLoader windowConfigLoader,
+    @Autowired
+    public DatabaseConnectionController(DbConnectionStorageService connectionStorageService, DbCredentialsConfigLoader configLoader,
                                         EntityMappingService entityMappingService, ModelMapper modelMapper) {
         this.connectionStorageService = connectionStorageService;
-        this.windowConfigLoader = windowConfigLoader;
+        this.configLoader = configLoader;
         this.entityMappingService = entityMappingService;
         this.modelMapper = modelMapper;
     }
@@ -74,7 +75,7 @@ public class DatabaseConnectionController extends BaseController {
             return this.handleStoredDbCredentials(request);
         }
 
-        UserDbConnection dbConnection = this.connectionStorageService.getDbConnection(session.getId());
+        final UserDbConnection dbConnection = this.connectionStorageService.getDbConnection(session.getId());
         if (dbConnection != null) {
 
             if (dbConnection.getJdbcConnection() == null || dbConnection.getJdbcConnection().isClosed()) {
@@ -146,7 +147,7 @@ public class DatabaseConnectionController extends BaseController {
 
         connectionUtils.connectWithORM(dbConnection, bindingModel.getDatabaseName(), this.entityMappingService.getAllEntities());
 
-        this.windowConfigLoader.saveDatabaseCredentials(dbConnection.getCredentials());
+        this.configLoader.saveDatabaseCredentials(dbConnection.getCredentials());
 
         return super.redirect(LOGIN_ROUTE);
     }
@@ -174,7 +175,7 @@ public class DatabaseConnectionController extends BaseController {
 
         connectionUtils.createORMConnection(dbConnection, bindingModel, this.entityMappingService.getAllEntities());
 
-        this.windowConfigLoader.saveDatabaseCredentials(dbConnection.getCredentials());
+        this.configLoader.saveDatabaseCredentials(dbConnection.getCredentials());
 
         return super.redirect(LOGIN_ROUTE);
     }
@@ -188,15 +189,12 @@ public class DatabaseConnectionController extends BaseController {
      */
     @GetMapping(DISABLE_JPA_CACHE_ROUTE)
     @PreAuthorize(AuthorizationType.LOGGED_IN)
-//    public JsonResponse refreshDbCacheAction() {
-//        return new JsonResponse();
-//    }
     public ModelAndView refreshDbCacheAction() {
         return super.redirect("/");
     }
 
     private ModelAndView handleStoredDbCredentials(HttpSoletRequest request) {
-        if (this.windowConfigLoader.loadSavedDatabase(request.getSession().getId())) {
+        if (this.configLoader.loadSavedDatabase(request.getSession().getId())) {
             return super.redirect(LOGIN_ROUTE);
         }
 

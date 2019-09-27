@@ -54,14 +54,6 @@
             <systemPath>${basedir}/lib/summer-1.0.jar</systemPath>
         </dependency>
 
-        <dependency>
-            <groupId>org.bitbucket</groupId>
-            <artifactId>jcef</artifactId>
-            <systemPath>${project.basedir}/lib/jcef-49.jar</systemPath>
-            <version>1.0</version>
-            <scope>system</scope>
-        </dependency>
-
         <!-- !Platform Dependencies -->
 
         <!-- Third Party Dependencies -->
