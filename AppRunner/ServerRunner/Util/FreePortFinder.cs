@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ServerRunner
+namespace ServerRunner.Util
 {
     static class FreePortFinder
     {
@@ -29,11 +25,13 @@ namespace ServerRunner
             try
             {
                 TcpListener tcpListener = new TcpListener(ipAddress, port);
+
                 tcpListener.Start();
                 tcpListener.Stop();
+
                 return true;
             }
-            catch (SocketException ex)
+            catch (SocketException)
             {
                 return false;
             }
