@@ -10,24 +10,29 @@ import com.cyecize.summer.SummerBootApplication;
 import com.cyecize.summer.constants.IocConstants;
 
 public class MainSolet extends DispatcherSolet {
+
     public MainSolet() {
-        SummerBootApplication.run(this, (classes -> {
-            super.dependencyContainer.getObject(EntityMappingService.class).init(classes);
-        }));
+        SummerBootApplication.run(this, classes -> super.dependencyContainer.getObject(EntityMappingService.class).init(classes));
     }
 
     @Override
     protected void onApplicationLoaded() {
         super.dependencyContainer.getObject(FileSystemConfigLoader.class).initFiles(super.getSoletConfig().getAttribute(IocConstants.SOLET_CFG_ASSETS_DIR) + "");
-        this.handleEmbeddedBrowser();
+        this.connectToAppRunner();
     }
 
-    private void handleEmbeddedBrowser() {
-        final JavacheConfigService javacheConfigService = (JavacheConfigService) super.getSoletConfig().getAttribute(BroccolinaConstants.SOLET_CONFIG_SERVER_CONFIG_SERVICE_KEY);
+    /**
+     * Creates a connection with the C# app that is used to run this app at runtime.
+     * Checks if a second startup param has been passed and if it is, parses it to int and
+     * used it as a port to communicate with the C# runner app.
+     */
+    private void connectToAppRunner() {
+        final JavacheConfigService configService = (JavacheConfigService) super.getSoletConfig().getAttribute(BroccolinaConstants.SOLET_CONFIG_SERVER_CONFIG_SERVICE_KEY);
 
-        int serverPort = javacheConfigService.getConfigParam(ConfigConstants.SERVER_PORT, int.class);
-        if (!StartUp.isAppStartedFromEmbeddedServer) {
-            serverPort = Integer.parseInt(javacheConfigService.getConfigParam(ConfigConstants.SERVER_STARTUP_ARGS, String[].class)[1]);
+        String[] startupArgs = configService.getConfigParam(ConfigConstants.SERVER_STARTUP_ARGS, String[].class);
+        if (startupArgs.length > 1) {
+            final int callbackPort = Integer.parseInt(startupArgs[1]);
+            //TODO: create callback functionality.
         }
     }
 }
