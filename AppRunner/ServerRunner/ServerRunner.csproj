@@ -81,7 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\LocalConfigKeys.cs" />
+    <Compile Include="Interfaces\ICommandParser.cs" />
     <Compile Include="Interfaces\ILocalConfigManager.cs" />
+    <Compile Include="Services\CommandParser.cs" />
     <Compile Include="Services\LocalConfigManager.cs" />
     <Compile Include="Util\FreePortFinder.cs" />
     <Compile Include="StartUp.cs" />

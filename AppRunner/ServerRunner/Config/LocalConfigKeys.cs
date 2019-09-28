@@ -8,20 +8,25 @@ namespace ServerRunner.Config
 {
     public static class LocalConfigKeys
     {
-        public const string JavaExePath = "java_exe_path";
+        public const string InterpreterExePath = "interpreter_path";
 
-        public const string JavaCommand = "java_command";
+        public const string Command = "command";
+
+        public const string CommunicationPort = "communication_port";
 
         public const string WindowWidth = "window_width";
 
         public const string WindowHeight = "window_height";
 
-        public static readonly string[] All = { JavaCommand, JavaExePath, WindowHeight, WindowWidth };
+        public static readonly string[] All = { Command, InterpreterExePath, WindowHeight, WindowWidth, CommunicationPort };
+
+        //TODO add UseCommunicationPort config in case this app is used for different applications.
 
         public static readonly Dictionary<string, string> Defaults = new Dictionary<string, string>
         {
-            {JavaExePath, @"jre\bin\java.exe" },
-            {JavaCommand, "" },
+            {InterpreterExePath, @"jre\bin\java.exe" },
+            {Command, "" },
+            {CommunicationPort, "4000" },
             {WindowWidth, "800" },
             {WindowHeight, "600" },
         };
