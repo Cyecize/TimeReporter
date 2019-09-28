@@ -3,6 +3,7 @@ package com.cyecize.reporter;
 import com.cyecize.broccolina.BroccolinaConstants;
 import com.cyecize.javache.ConfigConstants;
 import com.cyecize.javache.services.JavacheConfigService;
+import com.cyecize.reporter.common.services.AppRunnerCommunicationService;
 import com.cyecize.reporter.conn.services.EntityMappingService;
 import com.cyecize.reporter.localConfig.services.FileSystemConfigLoader;
 import com.cyecize.summer.DispatcherSolet;
@@ -32,7 +33,7 @@ public class MainSolet extends DispatcherSolet {
         String[] startupArgs = configService.getConfigParam(ConfigConstants.SERVER_STARTUP_ARGS, String[].class);
         if (startupArgs.length > 1) {
             final int callbackPort = Integer.parseInt(startupArgs[1]);
-            //TODO: create callback functionality.
+            super.dependencyContainer.getObject(AppRunnerCommunicationService.class).initialize(callbackPort);
         }
     }
 }
