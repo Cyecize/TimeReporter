@@ -1,86 +1,81 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Net;
-using System.Timers;
+using System.IO;
+using System.Windows.Forms;
+using CefSharp;
+using CefSharp.WinForms;
+using ServerRunner.Config;
+using ServerRunner.Forms;
+using ServerRunner.Interfaces;
+using ServerRunner.Services;
+using ServerRunner.Util;
 
 namespace ServerRunner
 {
-    /**
-     * This app does the following things:
-     *      Finds 2 available ports
-     *      Executes a cmd command to run the Javache server.
-     *      Creates a listener on one of the ports and waits for javache to connect.
-     *          When javache connects, this app will close out.
-     *          If javache does not connect, this app will close due to timeout.
-     *      Prints the output of the Javache server on the console.
-     */
-    class StartUp
+    //    private static void InitAppTimeout()
+    //    {
+    //        Timer timer = new Timer();
+    //        timer.Interval = 15000;
+    //        timer.Elapsed += (sender, eventArgs) =>
+    //        {
+    //            Console.WriteLine("App did not start properly!");
+    //            Console.ReadKey();
+    //            Environment.Exit(1);
+    //        };
+
+    //        timer.Start();
+    //    }
+
+    public class StartUp
     {
-        static void Main(string[] args)
+        private static bool _appLoaded;
+
+        [STAThread]
+        public static void Main(string[] args)
         {
-            const int initialPort = 8000;
-            const int initialAppLoadedListenerPort = 4000;
+            Application.EnableVisualStyles();
 
-            Console.WriteLine("\n\nStarting Time Reporter\n\n");
-            Process process = new Process();
+            ILocalConfigManager configManager = new LocalConfigManager();
+            configManager.AdjustPortValues();
 
-            process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.RedirectStandardInput = true;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.UseShellExecute = false;
+            ICommunicationManager communicationManager = new CommunicationManager(configManager);
 
-            process.Start();
+            ICommandParser commandParser = new CommandParser(configManager);
 
-            int appPort = FreePortFinder.FindFreePort(initialPort);
-            int appLoadedListenerPort = FreePortFinder.FindFreePort(initialAppLoadedListenerPort);
+            communicationManager.OnAppStarted += msg => _appLoaded = true;
+            communicationManager.Start();
 
-            process.StandardInput.WriteLine(@"jre\bin\java.exe -cp "".;./bin/javache-api-1.2.7.jar;"" com.cyecize.StartUp " + appPort + " " + appLoadedListenerPort);
+            ConsoleProcess consoleProcess = new ConsoleProcess(commandParser.ParseCommand(), bool.Parse(configManager.GetConfig(LocalConfigKeys.ShowCmd)));
+            consoleProcess.ExecuteCommand();
 
-            process.StandardInput.Flush();
-            process.StandardInput.Close();
+            while (!_appLoaded)
+            {
+                //TODO set timeout
+            }
 
-            process.OutputDataReceived += (sender, eventArgs) => { Console.WriteLine(eventArgs.Data); };
-            process.BeginOutputReadLine();
-
-            InitAppTimeout();
-            InitAppLoadedListener(appPort, appLoadedListenerPort);
+            OnAppLoaded(configManager, commandParser);
         }
 
-        private static void InitAppTimeout()
+        private static void OnAppLoaded(ILocalConfigManager configManager, ICommandParser commandParser)
         {
-            Timer timer = new Timer();
-            timer.Interval = 15000;
-            timer.Elapsed += (sender, eventArgs) =>
+            CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
+            Cef.EnableHighDPISupport();
+
+            CefSettings settings = new CefSettings()
             {
-                Console.WriteLine("App did not start properly!");
-                Console.ReadKey();
-                Environment.Exit(1);
+                CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache")
             };
 
-            timer.Start();
-        }
+            Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
 
-        private static void InitAppLoadedListener(int appPort, int callbackPort)
-        {
-            HttpListener listener = new HttpListener();
+            //TODO: add utility class for this.
+            //TODO on form close, save sizes.
+            BrowserForm form = new BrowserForm(commandParser.ParseBaseUrl())
+            {
+                Width = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowWidth)),
+                Height = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowHeight))
+            };
 
-            listener.Prefixes.Add($"http://localhost:{callbackPort}/database/connect/");
-
-            listener.Start();
-
-            HttpListenerContext context = listener.GetContext();
-            HttpListenerRequest request = context.Request;
-
-            HttpListenerResponse response = context.Response;
-            response.Redirect($"http://localhost:{appPort}/database/connect?loadStoredCredentials");
-
-            System.IO.Stream output = response.OutputStream;
-            output.WriteByte(0);
-
-            output.Close();
-            listener.Stop();
-            Environment.Exit(0);
+            Application.Run(form);
         }
     }
 }

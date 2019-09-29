@@ -6,7 +6,7 @@
 
     <groupId>com.cyecize</groupId>
     <artifactId>time-reporter</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <build>
         <plugins>
             <plugin>
@@ -54,14 +54,6 @@
             <systemPath>${basedir}/lib/summer-1.0.jar</systemPath>
         </dependency>
 
-        <dependency>
-            <groupId>org.bitbucket</groupId>
-            <artifactId>jcef</artifactId>
-            <systemPath>${project.basedir}/lib/jcef-49.jar</systemPath>
-            <version>1.0</version>
-            <scope>system</scope>
-        </dependency>
-
         <!-- !Platform Dependencies -->
 
         <!-- Third Party Dependencies -->
@@ -98,6 +90,14 @@
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket -->
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
         <!-- !Third Party Dependencies -->
     </dependencies>
 

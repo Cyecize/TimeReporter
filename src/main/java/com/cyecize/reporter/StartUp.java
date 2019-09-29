@@ -10,10 +10,7 @@ import java.util.Map;
 
 public class StartUp {
 
-    public static boolean isAppStartedFromEmbeddedServer = false;
-
     public static void main(String[] args) {
-        isAppStartedFromEmbeddedServer = true;
         System.err.close();
         System.setErr(System.out);
 
