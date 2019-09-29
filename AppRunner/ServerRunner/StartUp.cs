@@ -68,6 +68,7 @@ namespace ServerRunner
             Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
 
             //TODO: add utility class for this.
+            //TODO on form close, save sizes.
             BrowserForm form = new BrowserForm(commandParser.ParseBaseUrl())
             {
                 Width = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowWidth)),

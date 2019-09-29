@@ -28,12 +28,39 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BrowserForm));
+            this.LblLoadingApp = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // LblLoadingApp
+            // 
+            this.LblLoadingApp.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.LblLoadingApp.AutoSize = true;
+            this.LblLoadingApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblLoadingApp.Location = new System.Drawing.Point(416, 52);
+            this.LblLoadingApp.Name = "LblLoadingApp";
+            this.LblLoadingApp.Size = new System.Drawing.Size(199, 37);
+            this.LblLoadingApp.TabIndex = 0;
+            this.LblLoadingApp.Text = "Loading App";
+            // 
+            // BrowserForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "BrowserForm";
+            this.ClientSize = new System.Drawing.Size(1034, 561);
+            this.Controls.Add(this.LblLoadingApp);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(1050, 600);
+            this.Name = "BrowserForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Time Reporter";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Label LblLoadingApp;
     }
 }

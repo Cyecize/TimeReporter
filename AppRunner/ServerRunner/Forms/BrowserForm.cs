@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CefSharp.WinForms;
+using CefSharp.WinForms.Internals;
 
 namespace ServerRunner.Forms
 {
@@ -25,7 +26,15 @@ namespace ServerRunner.Forms
                 Dock = DockStyle.Fill,
             };
 
+            this._browser.IsBrowserInitializedChanged += this.OnIsBrowserInitializedChanged;
+
             this.Controls.Add(this._browser);
+        }
+
+        private void OnIsBrowserInitializedChanged(object sender, EventArgs e)
+        {
+            this._browser.Show();
+            this.LblLoadingApp.Hide();
         }
     }
 }
