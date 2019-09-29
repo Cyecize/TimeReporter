@@ -9,5 +9,7 @@ namespace ServerRunner.Interfaces
     public interface ICommandParser
     {
         string ParseCommand();
+
+        string ParseBaseUrl();
     }
 }

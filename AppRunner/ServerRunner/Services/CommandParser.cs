@@ -25,6 +25,16 @@ namespace ServerRunner.Services
             return $"{this._configManager.GetConfig(LocalConfigKeys.InterpreterExePath)} {command}";
         }
 
+        public string ParseBaseUrl()
+        {
+            string baseUrl = this._configManager.GetConfig(LocalConfigKeys.AppStartingUrl);
+
+            this.HandlePortFormatting(ref baseUrl);
+            this.HandleConfigFormatting(ref baseUrl);
+
+            return baseUrl;
+        }
+
         private void HandlePortFormatting(ref string command)
         {
             Regex regex = new Regex(@"{port:(?<port>[0-9]{1,})}");

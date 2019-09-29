@@ -9,7 +9,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{33203366-F3DD-458C-858E-711B15D31EC2}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>ServerRunner</RootNamespace>
     <AssemblyName>Time Reporter</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -47,7 +47,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>ServerRunner.StartUp</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -76,6 +76,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,12 +87,19 @@
   <ItemGroup>
     <Compile Include="Config\CommunicationMessages.cs" />
     <Compile Include="Config\LocalConfigKeys.cs" />
+    <Compile Include="Forms\BrowserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BrowserForm.Designer.cs">
+      <DependentUpon>BrowserForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\ICommandParser.cs" />
     <Compile Include="Interfaces\ICommunicationManager.cs" />
     <Compile Include="Interfaces\ILocalConfigManager.cs" />
     <Compile Include="CommunicationServer.cs" />
     <Compile Include="Services\CommandParser.cs" />
     <Compile Include="Services\CommunicationManager.cs" />
+    <Compile Include="Util\ConsoleProcess.cs" />
     <Compile Include="Services\LocalConfigManager.cs" />
     <Compile Include="Util\FreePortFinder.cs" />
     <Compile Include="StartUp.cs" />

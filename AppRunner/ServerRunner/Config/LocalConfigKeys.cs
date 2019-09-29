@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ServerRunner.Config
 {
@@ -16,13 +12,17 @@ namespace ServerRunner.Config
 
         public const string AppPort = "app_port";
 
+        public const string AppStartingUrl = "app_start_url";
+
         public const string CommunicationAddress = "communication_address";
 
         public const string WindowWidth = "window_width";
 
         public const string WindowHeight = "window_height";
 
-        public static readonly string[] All = { Command, InterpreterExePath, WindowHeight, WindowWidth, CommunicationPort, CommunicationAddress, AppPort };
+        public const string ShowCmd = "show_cmd";
+
+        public static readonly string[] All = { Command, InterpreterExePath, WindowHeight, WindowWidth, CommunicationPort, CommunicationAddress, AppPort, ShowCmd, AppStartingUrl };
 
         //TODO add UseCommunicationPort config in case this app is used for different applications.
 
@@ -35,6 +35,8 @@ namespace ServerRunner.Config
             {WindowWidth, "800" },
             {WindowHeight, "600" },
             {AppPort, "8080" },
+            {ShowCmd, "false" },
+            {AppStartingUrl, "http://localhost:{config:app_port}" },
         };
 
     }
