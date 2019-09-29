@@ -2,7 +2,6 @@
 using Fleck;
 using ServerRunner.Config;
 using ServerRunner.Interfaces;
-using ServerRunner.Util;
 
 namespace ServerRunner.Services
 {
@@ -57,10 +56,7 @@ namespace ServerRunner.Services
 
         private int GetOpenPort()
         {
-            int port = FreePortFinder.FindFreePort(int.Parse(this._configManager.GetConfig(LocalConfigKeys.CommunicationPort)));
-            this._configManager.SetConfig(LocalConfigKeys.CommunicationPort, port + "");
-
-            return port;
+            return int.Parse(this._configManager.GetConfig(LocalConfigKeys.CommunicationPort));
         }
 
         private void OnApplicationConnection(IWebSocketConnection client)

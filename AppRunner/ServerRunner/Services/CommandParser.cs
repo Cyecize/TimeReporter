@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using ServerRunner.Config;
 using ServerRunner.Interfaces;
 using ServerRunner.Util;
 
@@ -7,19 +8,21 @@ namespace ServerRunner.Services
     public class CommandParser : ICommandParser
     {
 
-        private ILocalConfigManager _configManager;
+        private readonly ILocalConfigManager _configManager;
 
         public CommandParser(ILocalConfigManager localConfig)
         {
             this._configManager = localConfig;
         }
 
-        public string ParseCommand(string command)
+        public string ParseCommand()
         {
+            string command = this._configManager.GetConfig(LocalConfigKeys.Command);
+
             this.HandlePortFormatting(ref command);
             this.HandleConfigFormatting(ref command);
 
-            return command;
+            return $"{this._configManager.GetConfig(LocalConfigKeys.InterpreterExePath)} {command}";
         }
 
         private void HandlePortFormatting(ref string command)

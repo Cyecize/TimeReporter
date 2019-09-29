@@ -33,7 +33,7 @@ public class AppRunnerCommunicationServiceImpl implements AppRunnerCommunication
     @Override
     public void initialize(int port) {
         try {
-            this.socket = new ClientSocket(port, this::onMessageReceived, this::onConnectionClosed, null);
+            this.socket = new ClientSocket(port, this::onMessageReceived, this::onConnectionClosed, this::onError);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             System.exit(1);
@@ -64,6 +64,11 @@ public class AppRunnerCommunicationServiceImpl implements AppRunnerCommunication
 
     private void onConnectionClosed(int code, String reason, boolean remote) {
         System.exit(0);
+    }
+
+    private void onError(Exception ex) {
+        ex.printStackTrace();
+        System.exit(1);
     }
 
     private void saveDbCredentials(String sessionId) {

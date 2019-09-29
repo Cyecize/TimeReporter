@@ -10,7 +10,11 @@ namespace ServerRunner.Interfaces
     {
         void Save();
 
+        void AdjustPortValues();
+
         void SetConfig(string configName, string configValue);
+
+        void SetTempConfig(string configName, string configValue);
 
         string GetConfig(string configName);
     }
