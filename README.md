@@ -32,10 +32,16 @@ Front end
 Back end - 	[Custom Web Framework](https://github.com/Cyecize/java-web-server)
 
 	* Hibernate
+	* My SQL
+	* MS SQL Server
+	* org.java-websocket Java-WebSocket
 
 Desktop frame
 
-	* jCEF - Java Chromium Embedded Framework	
+	* jCEF - Java Chromium Embedded Framework on the older version
+	* CefSharp - Chromium Embedded Framework for C# on the new version
+	
+	* Fleck - WebSocket implementation for C#
 	
 Want to run the app?
 ---------------------
