@@ -23,11 +23,10 @@ public class ClientSocket extends WebSocketClient {
 
     public ClientSocket(URI serverUri) {
         this(serverUri, null, null, null);
-        super.connect();
     }
 
     public ClientSocket(int port, OnMessage onMessage, OnClose onClose, OnError onError) throws URISyntaxException {
-        this(new URI(String.format("127.0.0.1:%d", port)), onMessage, onClose, onError);
+        this(new URI(String.format("ws://127.0.0.1:%d", port)), onMessage, onClose, onError);
     }
 
     public ClientSocket(URI serverUri, OnMessage onMessage, OnClose onClose, OnError onError) {
@@ -35,6 +34,7 @@ public class ClientSocket extends WebSocketClient {
         this.onMessage = onMessage;
         this.onClose = onClose;
         this.onError = onError;
+        super.connect();
     }
 
     @Override

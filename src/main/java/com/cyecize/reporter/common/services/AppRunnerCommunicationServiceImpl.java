@@ -16,6 +16,8 @@ public class AppRunnerCommunicationServiceImpl implements AppRunnerCommunication
 
     private static final String TERMINATE_APP_MSG = "app_stop";
 
+    private static final String APP_INITIALIZE_MSG = "app_initialize";
+
     private final DbCredentialsConfigLoader dbCredentialsConfigLoader;
 
     private final DbConnectionStorageService dbConnectionStorageService;
@@ -31,7 +33,7 @@ public class AppRunnerCommunicationServiceImpl implements AppRunnerCommunication
     @Override
     public void initialize(int port) {
         try {
-            this.socket = new ClientSocket(port, this::onMessageReceived, null, null);
+            this.socket = new ClientSocket(port, this::onMessageReceived, this::onConnectionClosed, null);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             System.exit(1);
@@ -51,7 +53,17 @@ public class AppRunnerCommunicationServiceImpl implements AppRunnerCommunication
 
                 System.exit(0);
                 break;
+            case APP_INITIALIZE_MSG:
+                if (tokens.length > 1) {
+                    this.dbCredentialsConfigLoader.loadSavedDatabase(tokens[1]);
+                }
+                
+                break;
         }
+    }
+
+    private void onConnectionClosed(int code, String reason, boolean remote) {
+        System.exit(0);
     }
 
     private void saveDbCredentials(String sessionId) {
@@ -66,6 +78,10 @@ public class AppRunnerCommunicationServiceImpl implements AppRunnerCommunication
     }
 
     private void notifyAppRunner() {
+        while (!this.socket.isOpen()) {
+
+        }
+
         this.socket.send(APP_STARTED_MSG);
     }
 }
