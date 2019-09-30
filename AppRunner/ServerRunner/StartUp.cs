@@ -53,14 +53,27 @@ namespace ServerRunner
 
             InitCef();
             //TODO: add utility class for this.
-            //TODO on form close, save sizes.
             BrowserForm form = new BrowserForm(commandParser.ParseBaseUrl())
             {
                 Width = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowWidth)),
-                Height = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowHeight))
+                Height = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowHeight)),
+                WindowState = bool.Parse(configManager.GetConfig(LocalConfigKeys.WindowMaximizedState)) ? FormWindowState.Maximized : FormWindowState.Normal
             };
 
-            form.SizeChanged += (sender, eventArgs) => { Console.WriteLine("Size has changed"); };
+            form.SizeChanged += (sender, eventArgs) =>
+            {
+                configManager.SetConfig(LocalConfigKeys.WindowWidth, form.Width.ToString());
+                configManager.SetConfig(LocalConfigKeys.WindowHeight, form.Height.ToString());
+            };
+
+            form.FormClosing += (sender, eventArgs) =>
+            {
+                configManager.SetConfig(LocalConfigKeys.WindowMaximizedState, (form.WindowState == FormWindowState.Maximized).ToString());
+                configManager.Save();
+                communicationManager.SendStopMessage();
+                consoleProcess.Kill();
+                Environment.Exit(0);
+            };
 
             Application.Run(form);
         }

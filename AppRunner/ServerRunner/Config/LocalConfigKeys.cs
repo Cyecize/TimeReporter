@@ -22,9 +22,24 @@ namespace ServerRunner.Config
 
         public const string WindowHeight = "window_height";
 
+        public const string WindowMaximizedState = "window_maximized_state";
+
         public const string ShowCmd = "show_cmd";
 
-        public static readonly string[] All = { Command, InterpreterExePath, WindowHeight, WindowWidth, CommunicationPort, CommunicationAddress, AppPort, ShowCmd, AppStartingUrl, AppStartTimeout };
+        public static readonly string[] All =
+        {
+            Command,
+            InterpreterExePath,
+            WindowHeight,
+            WindowWidth,
+            CommunicationPort,
+            CommunicationAddress,
+            AppPort,
+            ShowCmd,
+            AppStartingUrl,
+            AppStartTimeout,
+            WindowMaximizedState
+        };
 
         //TODO add UseCommunicationPort config in case this app is used for different applications.
 
@@ -40,6 +55,7 @@ namespace ServerRunner.Config
             {ShowCmd, "false" },
             {AppStartingUrl, "http://localhost:{config:app_port}" },
             {AppStartTimeout, "10000" },
+            {WindowMaximizedState, "false" },
         };
 
     }
