@@ -31,8 +31,10 @@ public class MainSolet extends DispatcherSolet {
         final JavacheConfigService configService = (JavacheConfigService) super.getSoletConfig().getAttribute(BroccolinaConstants.SOLET_CONFIG_SERVER_CONFIG_SERVICE_KEY);
 
         String[] startupArgs = configService.getConfigParam(ConfigConstants.SERVER_STARTUP_ARGS, String[].class);
+
         if (startupArgs.length > 1) {
             final int callbackPort = Integer.parseInt(startupArgs[1]);
+            System.out.println(String.format("Calling back to app runner on port %d", callbackPort));
             super.dependencyContainer.getObject(AppRunnerCommunicationService.class).initialize(callbackPort);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
@@ -11,20 +12,6 @@ using ServerRunner.Util;
 
 namespace ServerRunner
 {
-    //    private static void InitAppTimeout()
-    //    {
-    //        Timer timer = new Timer();
-    //        timer.Interval = 15000;
-    //        timer.Elapsed += (sender, eventArgs) =>
-    //        {
-    //            Console.WriteLine("App did not start properly!");
-    //            Console.ReadKey();
-    //            Environment.Exit(1);
-    //        };
-
-    //        timer.Start();
-    //    }
-
     public class StartUp
     {
         private static bool _appLoaded;
@@ -41,21 +28,44 @@ namespace ServerRunner
 
             ICommandParser commandParser = new CommandParser(configManager);
 
+            communicationManager.OnMessage += msg => Console.WriteLine($"Msg from app: {msg}");
             communicationManager.OnAppStarted += msg => _appLoaded = true;
             communicationManager.Start();
 
             ConsoleProcess consoleProcess = new ConsoleProcess(commandParser.ParseCommand(), bool.Parse(configManager.GetConfig(LocalConfigKeys.ShowCmd)));
             consoleProcess.ExecuteCommand();
 
+            long connectionTimeout = long.Parse(configManager.GetConfig(LocalConfigKeys.AppStartTimeout));
+            long connectionElapsedTime = 0L;
+
             while (!_appLoaded)
             {
-                //TODO set timeout
+                connectionElapsedTime += 1;
+                Thread.Sleep(1);
+
+                if (connectionElapsedTime > connectionTimeout)
+                {
+                    MessageBox.Show("App was not started", "Error");
+                    consoleProcess.Kill();
+                    return;
+                }
             }
 
-            OnAppLoaded(configManager, commandParser);
+            InitCef();
+            //TODO: add utility class for this.
+            //TODO on form close, save sizes.
+            BrowserForm form = new BrowserForm(commandParser.ParseBaseUrl())
+            {
+                Width = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowWidth)),
+                Height = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowHeight))
+            };
+
+            form.SizeChanged += (sender, eventArgs) => { Console.WriteLine("Size has changed"); };
+
+            Application.Run(form);
         }
 
-        private static void OnAppLoaded(ILocalConfigManager configManager, ICommandParser commandParser)
+        private static void InitCef()
         {
             CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
             Cef.EnableHighDPISupport();
@@ -66,16 +76,6 @@ namespace ServerRunner
             };
 
             Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
-
-            //TODO: add utility class for this.
-            //TODO on form close, save sizes.
-            BrowserForm form = new BrowserForm(commandParser.ParseBaseUrl())
-            {
-                Width = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowWidth)),
-                Height = int.Parse(configManager.GetConfig(LocalConfigKeys.WindowHeight))
-            };
-
-            Application.Run(form);
         }
     }
 }

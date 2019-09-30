@@ -14,6 +14,8 @@ namespace ServerRunner.Config
 
         public const string AppStartingUrl = "app_start_url";
 
+        public const string AppStartTimeout = "app_start_timeout";
+
         public const string CommunicationAddress = "communication_address";
 
         public const string WindowWidth = "window_width";
@@ -22,7 +24,7 @@ namespace ServerRunner.Config
 
         public const string ShowCmd = "show_cmd";
 
-        public static readonly string[] All = { Command, InterpreterExePath, WindowHeight, WindowWidth, CommunicationPort, CommunicationAddress, AppPort, ShowCmd, AppStartingUrl };
+        public static readonly string[] All = { Command, InterpreterExePath, WindowHeight, WindowWidth, CommunicationPort, CommunicationAddress, AppPort, ShowCmd, AppStartingUrl, AppStartTimeout };
 
         //TODO add UseCommunicationPort config in case this app is used for different applications.
 
@@ -37,6 +39,7 @@ namespace ServerRunner.Config
             {AppPort, "8080" },
             {ShowCmd, "false" },
             {AppStartingUrl, "http://localhost:{config:app_port}" },
+            {AppStartTimeout, "10000" },
         };
 
     }
