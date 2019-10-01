@@ -32,22 +32,6 @@
 
         <dependency>
             <groupId>com.cyecize</groupId>
-            <artifactId>http</artifactId>
-            <version>1.2.2</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/http-1.2.2.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.cyecize</groupId>
-            <artifactId>solet</artifactId>
-            <version>1.2.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/solet-1.2.0.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.cyecize</groupId>
             <artifactId>summer</artifactId>
             <version>1.0</version>
             <scope>system</scope>
