@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
 @TemplateService(serviceNameInTemplate = "dbConnectionService")
 public class DbConnectionStorageServiceImpl implements DbConnectionStorageService {
 

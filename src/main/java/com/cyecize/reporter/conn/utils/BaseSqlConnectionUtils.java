@@ -46,7 +46,7 @@ public abstract class BaseSqlConnectionUtils implements SqlConnectionUtils {
 
         this.createORMConnection(userDbConnection, credentials, mappedEntities);
 
-        SummerBootApplication.dependencyContainer.getObject(DatabaseInitializeService.class).initializeDatabase(userDbConnection.getEntityManager());
+        SummerBootApplication.dependencyContainer.getService(DatabaseInitializeService.class).initializeDatabase(userDbConnection.getEntityManager());
     }
 
     @Override
@@ -58,7 +58,7 @@ public abstract class BaseSqlConnectionUtils implements SqlConnectionUtils {
 
         this.initNewDatabase(userDbConnection);
 
-        SummerBootApplication.dependencyContainer.getObject(DatabaseInitializeService.class)
+        SummerBootApplication.dependencyContainer.getService(DatabaseInitializeService.class)
                 .initializeFirstTime(userDbConnection.getEntityManager(), this.modelMapper.map(bindingModel, AdminUserServiceModel.class));
     }
 

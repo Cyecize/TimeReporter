@@ -16,7 +16,7 @@ import java.util.Locale;
 public class LocalDateTimeAdapter implements DataAdapter<LocalDateTime> {
     @Override
     public LocalDateTime resolve(String paramName, HttpSoletRequest httpSoletRequest) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a", Locale.US);
+       final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a", Locale.US);
 
         try {
             String rawDate = httpSoletRequest.getBodyParameters().get(paramName);

@@ -1,12 +1,11 @@
 package com.cyecize.reporter.conn.services;
 
+import com.cyecize.ioc.models.ServiceDetails;
 import com.cyecize.reporter.common.contracts.DbInitable;
 import com.cyecize.reporter.common.repositories.BaseRepository;
 import com.cyecize.reporter.conn.serviceModels.AdminUserServiceModel;
 import com.cyecize.reporter.users.enums.RoleType;
 import com.cyecize.reporter.users.services.UserService;
-import com.cyecize.summer.SummerBootApplication;
-import com.cyecize.summer.common.annotations.PostConstruct;
 import com.cyecize.summer.common.annotations.Service;
 
 import javax.persistence.EntityManager;
@@ -25,22 +24,20 @@ public class DatabaseInitializeServiceImpl implements DatabaseInitializeService 
         this.userService = userService;
     }
 
-    @PostConstruct
     public void init() {
-        this.initDatabaseInitializingServices(SummerBootApplication.dependencyContainer.getServicesAndBeans());
+        //this.initDatabaseInitializingServices(SummerBootApplication.dependencyContainer.getImplementations(DbInitable.class));
     }
 
     @Override
-    public void initDatabaseInitializingServices(Collection<Object> servicesAndBeans) {
+    public void initDatabaseInitializingServices(Collection<ServiceDetails> servicesAndBeans) {
         this.dbInitablesServices = servicesAndBeans.stream()
-                .filter(s -> DbInitable.class.isAssignableFrom(s.getClass()))
-                .map(s -> (DbInitable) s)
+                .map(s -> (DbInitable) s.getProxyInstance())
                 .collect(Collectors.toList());
     }
 
     @Override
     public void initializeDatabase(EntityManager entityManager) {
-        EntityManager oldEm = BaseRepository.currentEntityManager;
+        final EntityManager oldEm = BaseRepository.currentEntityManager;
         BaseRepository.currentEntityManager = entityManager;
 
         for (DbInitable dbInitablesService : this.dbInitablesServices) {
@@ -54,7 +51,7 @@ public class DatabaseInitializeServiceImpl implements DatabaseInitializeService 
     public void initializeFirstTime(EntityManager entityManager, AdminUserServiceModel adminUserServiceModel) {
         this.initializeDatabase(entityManager);
 
-        EntityManager oldEm = BaseRepository.currentEntityManager;
+        final EntityManager oldEm = BaseRepository.currentEntityManager;
         BaseRepository.currentEntityManager = entityManager;
 
         this.userService.createUser(adminUserServiceModel.getAdminUsername(), adminUserServiceModel.getAdminPassword(), RoleType.ROLE_ADMIN);

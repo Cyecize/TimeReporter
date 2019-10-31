@@ -25,17 +25,17 @@
         <dependency>
             <groupId>com.cyecize</groupId>
             <artifactId>javache-embedded</artifactId>
-            <version>1.0</version>
+            <version>1.3</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/javache-embedded-1.0.jar</systemPath>
+            <systemPath>${basedir}/lib/javache-embedded-1.3.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>com.cyecize</groupId>
             <artifactId>summer</artifactId>
-            <version>1.0</version>
+            <version>1.3</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/summer-1.0.jar</systemPath>
+            <systemPath>${basedir}/lib/summer-1.3.jar</systemPath>
         </dependency>
 
         <!-- !Platform Dependencies -->

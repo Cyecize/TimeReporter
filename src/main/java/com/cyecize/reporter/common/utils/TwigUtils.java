@@ -14,7 +14,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
-@Service
 @TemplateService(serviceNameInTemplate = "utils")
 public class TwigUtils {
 

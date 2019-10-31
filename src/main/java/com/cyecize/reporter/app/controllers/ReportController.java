@@ -75,7 +75,7 @@ public class ReportController extends BaseController {
     }
 
     @GetMapping("/my")
-    public ModelAndView myReportsAction(Principal principal, Model model, HttpSoletRequest request,
+    public ModelAndView myReportsAction(Principal principal, Model model,
                                         @ConvertedBy(LocalDateTimeAdapter.class) @RequestParam("startDate") LocalDateTime startDate,
                                         @ConvertedBy(LocalDateTimeAdapter.class) @RequestParam("endDate") LocalDateTime endDate) {
 
