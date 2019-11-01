@@ -1,14 +1,15 @@
 package com.cyecize.reporter.config;
 
+import com.cyecize.reporter.conn.services.DbConnectionStorageServiceImpl;
 import com.cyecize.summer.areas.security.models.SecurityConfig;
 import com.cyecize.summer.common.annotations.Bean;
 import com.cyecize.summer.common.annotations.BeanConfig;
+import com.cyecize.summer.common.annotations.SessionFactory;
+import com.cyecize.summer.common.enums.ServiceLifeSpan;
 import com.google.gson.Gson;
-import org.hibernate.internal.SessionImpl;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.Proxy;
 
 @BeanConfig
 public class BeanConfiguration {
@@ -32,7 +33,8 @@ public class BeanConfiguration {
         return new Gson();
     }
 
-    @Bean
+    @Bean(lifespan = ServiceLifeSpan.SESSION)
+    @SessionFactory(DbConnectionStorageServiceImpl.class)
     public EntityManager entityManager() {
         return null;
     }

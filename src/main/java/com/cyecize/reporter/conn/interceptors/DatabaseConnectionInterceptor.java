@@ -11,7 +11,6 @@ import com.cyecize.summer.SummerBootApplication;
 import com.cyecize.summer.areas.routing.models.ActionMethod;
 import com.cyecize.summer.common.annotations.Component;
 import com.cyecize.summer.common.extensions.InterceptorAdapter;
-import com.cyecize.summer.common.models.Model;
 
 import javax.persistence.EntityManager;
 
@@ -46,17 +45,11 @@ public class DatabaseConnectionInterceptor implements InterceptorAdapter {
                 if (actionMethod.getMethod().isAnnotationPresent(DisableJpaCache.class) || actionMethod.getControllerClass().isAnnotationPresent(DisableJpaCache.class)) {
                     dbConnection.getEntityManager().close();
                     dbConnection.setEntityManager(dbConnection.getOrmConnection().createEntityManager());
+                    SummerBootApplication.dependencyContainer.update(EntityManager.class, dbConnection.getEntityManager(), false);
                 }
-
-                SummerBootApplication.dependencyContainer.update(EntityManager.class, dbConnection.getEntityManager());
             }
         }
 
         return true;
-    }
-
-    @Override
-    public void postHandle(HttpSoletRequest request, HttpSoletResponse response, Object handler, Model model) {
-        SummerBootApplication.dependencyContainer.update(EntityManager.class, null);
     }
 }

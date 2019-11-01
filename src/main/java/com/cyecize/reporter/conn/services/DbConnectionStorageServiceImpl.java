@@ -3,10 +3,14 @@ package com.cyecize.reporter.conn.services;
 import com.cyecize.reporter.conn.DbConnectionConstants;
 import com.cyecize.reporter.conn.models.DbCredentials;
 import com.cyecize.reporter.conn.models.UserDbConnection;
+import com.cyecize.solet.HttpSoletRequest;
+import com.cyecize.summer.areas.scanning.services.DependencyContainer;
 import com.cyecize.summer.areas.template.annotations.TemplateService;
 import com.cyecize.summer.common.annotations.PostConstruct;
 import com.cyecize.summer.common.annotations.Service;
+import com.cyecize.summer.common.extensions.SessionScopeFactory;
 
+import javax.persistence.EntityManager;
 import javax.swing.*;
 import java.sql.Connection;
 import java.util.Date;
@@ -15,7 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @TemplateService(serviceNameInTemplate = "dbConnectionService")
-public class DbConnectionStorageServiceImpl implements DbConnectionStorageService {
+public class DbConnectionStorageServiceImpl implements DbConnectionStorageService, SessionScopeFactory<EntityManager> {
 
     private Map<String, UserDbConnection> sessionConnectionMap;
 
@@ -81,6 +85,16 @@ public class DbConnectionStorageServiceImpl implements DbConnectionStorageServic
             dbConnection.setLastUpdatedTime(new Date().getTime());
 
             return dbConnection;
+        }
+
+        return null;
+    }
+
+    @Override
+    public EntityManager getInstance(Class<?> serviceType, HttpSoletRequest request, DependencyContainer dependencyContainer) {
+        final UserDbConnection dbConnection = this.getDbConnection(request.getSession().getId());
+        if (dbConnection != null && dbConnection.getEntityManager() != null) {
+            return dbConnection.getEntityManager();
         }
 
         return null;
