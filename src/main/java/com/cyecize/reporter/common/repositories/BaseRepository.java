@@ -2,6 +2,7 @@ package com.cyecize.reporter.common.repositories;
 
 import com.cyecize.reporter.common.repositories.utils.ActionResult;
 import com.cyecize.reporter.common.repositories.utils.NoEntityManagerForSessionException;
+import com.cyecize.summer.common.annotations.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -14,16 +15,12 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public abstract class BaseRepository<E, I> {
-
-    /**
-     * Value is populated and erased by @{@link com.cyecize.reporter.conn.interceptors.DatabaseConnectionInterceptor}
-     */
-    public static EntityManager currentEntityManager;
-
+    
     protected final Class<E> persistentClass;
 
     protected final Class<I> primaryKeyType;
 
+    @Autowired
     protected EntityManager entityManager;
 
     protected CriteriaBuilder criteriaBuilder;
@@ -37,20 +34,20 @@ public abstract class BaseRepository<E, I> {
     }
 
     public void persist(E entity) {
-        this.execute((actionResult -> currentEntityManager.persist(entity)));
+        this.execute((actionResult -> this.entityManager.persist(entity)));
     }
 
     public void merge(E entity) {
-        this.execute(repositoryActionResult -> currentEntityManager.merge(entity));
+        this.execute(repositoryActionResult -> this.entityManager.merge(entity));
     }
 
     public void remove(E entity) {
-        this.execute((actionResult -> currentEntityManager.remove(entity)));
+        this.execute((actionResult -> this.entityManager.remove(entity)));
     }
 
     public Long count() {
         String query = String.format("SELECT count (t) FROM %s t", this.persistentClass.getSimpleName());
-        return this.execute((ar) -> ar.set(currentEntityManager.createQuery(query, Long.class).getSingleResult()), Long.class).get();
+        return this.execute((ar) -> ar.set(this.entityManager.createQuery(query, Long.class).getSingleResult()), Long.class).get();
     }
 
     public E find(I id) {
@@ -64,15 +61,14 @@ public abstract class BaseRepository<E, I> {
     }
 
     protected synchronized <T> ActionResult<T> execute(Consumer<ActionResult<T>> invoker, Class<? extends T> returnType) {
-        this.entityManager = currentEntityManager;
-        this.criteriaBuilder = currentEntityManager.getCriteriaBuilder();
+        this.criteriaBuilder = this.entityManager.getCriteriaBuilder();
 
-        if (currentEntityManager == null) {
+        if (this.entityManager == null) {
             throw new NoEntityManagerForSessionException("No entity manager for session.");
         }
 
         ActionResult<T> actionResult = new ActionResult<>();
-        EntityTransaction transaction = currentEntityManager.getTransaction();
+        EntityTransaction transaction = this.entityManager.getTransaction();
 
         transaction.begin();
         try {
@@ -99,7 +95,7 @@ public abstract class BaseRepository<E, I> {
 
             invoker.accept(criteria, root);
 
-            ar.set((T) currentEntityManager.createQuery(criteria).getResultStream().findFirst().orElse(null));
+            ar.set((T) this.entityManager.createQuery(criteria).getResultStream().findFirst().orElse(null));
         }, returnType).get();
     }
 
@@ -116,7 +112,7 @@ public abstract class BaseRepository<E, I> {
 
             invoker.accept(criteria, root);
 
-            ar.set(currentEntityManager.createQuery(criteria).getResultList());
+            ar.set(this.entityManager.createQuery(criteria).getResultList());
         }, List.class).get();
     }
 

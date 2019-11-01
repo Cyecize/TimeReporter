@@ -1,6 +1,5 @@
 package com.cyecize.reporter.conn.interceptors;
 
-import com.cyecize.reporter.common.repositories.BaseRepository;
 import com.cyecize.reporter.conn.DbConnectionConstants;
 import com.cyecize.reporter.conn.annotations.DisableJpaCache;
 import com.cyecize.reporter.conn.annotations.JdbcOnly;
@@ -8,10 +7,13 @@ import com.cyecize.reporter.conn.models.UserDbConnection;
 import com.cyecize.reporter.conn.services.DbConnectionStorageService;
 import com.cyecize.solet.HttpSoletRequest;
 import com.cyecize.solet.HttpSoletResponse;
+import com.cyecize.summer.SummerBootApplication;
 import com.cyecize.summer.areas.routing.models.ActionMethod;
 import com.cyecize.summer.common.annotations.Component;
 import com.cyecize.summer.common.extensions.InterceptorAdapter;
 import com.cyecize.summer.common.models.Model;
+
+import javax.persistence.EntityManager;
 
 /**
  * Checks if DbConnectionStorageService contains connection for the given sessionId and redirects to DB_CONNECT_ROUTE
@@ -30,8 +32,8 @@ public class DatabaseConnectionInterceptor implements InterceptorAdapter {
     public boolean preHandle(HttpSoletRequest request, HttpSoletResponse response, Object handler) {
 
         if (handler instanceof ActionMethod && !request.getRelativeRequestURL().equals(DbConnectionConstants.DB_CONNECT_ROUTE)) {
-            ActionMethod actionMethod = (ActionMethod) handler;
-            UserDbConnection dbConnection = this.connectionStorageService.getDbConnection(request.getSession().getId());
+            final ActionMethod actionMethod = (ActionMethod) handler;
+            final UserDbConnection dbConnection = this.connectionStorageService.getDbConnection(request.getSession().getId());
 
             //If there are not DB connections or there is only JDBC connection but the controller requires ORM connection.
             if (dbConnection == null || (dbConnection.getOrmConnection() == null && actionMethod.getControllerClass().getAnnotation(JdbcOnly.class) == null)) {
@@ -46,7 +48,7 @@ public class DatabaseConnectionInterceptor implements InterceptorAdapter {
                     dbConnection.setEntityManager(dbConnection.getOrmConnection().createEntityManager());
                 }
 
-                BaseRepository.currentEntityManager = dbConnection.getEntityManager();
+                SummerBootApplication.dependencyContainer.update(EntityManager.class, dbConnection.getEntityManager());
             }
         }
 
@@ -55,6 +57,6 @@ public class DatabaseConnectionInterceptor implements InterceptorAdapter {
 
     @Override
     public void postHandle(HttpSoletRequest request, HttpSoletResponse response, Object handler, Model model) {
-        BaseRepository.currentEntityManager = null;
+        SummerBootApplication.dependencyContainer.update(EntityManager.class, null);
     }
 }
